@@ -1,0 +1,107 @@
+Requirements:
+
+	Definitions:
+Device – The package containing Bluetooth transmitter, battery, and speaker, which is able to be attached to the target via an adhesive pad
+Target – Object the user wishes to locate using the device (intended target would be a Frisbee Golf Disc)
+Application – Software interface on the user's Smartphone to facilitate the registration and location of devices attached to targets
+
+1. Device
+1.1. Physical Design
+1.1.1. Package Body
+1.1.1.1. Made of plastic or other lightweight material
+1.1.1.2. Body must cause as little signal attenuation as possible
+1.1.1.3. Body will be water resistant and protect device from the elements
+1.1.1.4. Ideal package weight is 1-3 grams
+1.1.1.5. Package will not interfere with normal usage of target when properly attached
+1.1.1.5.1. Aerodynamics of Disc (intended target) must be minimally affected
+
+1.1.2. Package Interface
+1.1.2.1. Access port which enables the user to charge the device's battery charging
+1.1.2.2. Button
+1.1.2.2.1. Preferably conductive pad to minimize risk accidental triggering from environment
+1.1.2.2.2. Allows user to turn the device on and off
+1.1.2.2.3. Can facilitate registration of device with the Application if needed via alternate press method (double-press, long-press, etc.)
+1.1.2.3. Status LED
+1.1.2.3.1. Capable of relaying the following device state information to the user
+1.1.2.3.1.1. Device is powered Off
+1.1.2.3.1.2. Device is powered On
+1.1.2.3.1.3. Device is low on battery power
+1.1.2.3.1.4. Device has some internal error
+1.1.2.3.1.5. Device is communicating with application
+1.1.2.3.1.6. Device has successfully registered with the application
+
+1.1.3. Adhesive Pad
+1.1.3.1. Double-sided pad attached to both Device and Target
+1.1.3.2. Must be easily removable from both Device and Target
+1.1.3.3. Minimal residue left on Device and Target after removal of pad
+1.1.3.4. Pad will be made of disposable materials
+1.1.3.5. Several pads will be packaged with each device and/or made available separately 
+
+1.2. Software Specifications
+1.2.1. Modes of Operation
+1.2.1.1. While in range of User and communicating with Application
+1.2.1.1.1. Will remain powered on and active, responding as necessary to input from the Application
+1.2.1.1.2. Will indicate that it is in this mode on the status LED defined in (1.1.2.3.1.5)
+1.2.1.1.3. Will periodically broadcast it's MAC address to allow the Application to register it
+1.2.1.1.4. Will trigger the speaker if the Application requests it
+1.2.1.2. While out of range of User, or while not receiving input from the Application
+1.2.1.2.1. Will periodically wake from low power mode to perform the following actions:
+1.2.1.2.1.1. Broadcast a ping containing it's MAC address which the Application will listen for
+1.2.1.2.1.2. Listen for responses to it's ping from the Application to transition from the current state to that described in (1.2.1.1)
+
+1.2.2. State monitoring
+1.2.2.1. Device will be able to estimate it's total remaining battery life, and reduce frequency of wake cycles while in the mode described in (1.2.1.2.1) to compensate for lack of power
+
+1.3. Hardware Specifications
+1.3.1. Bluetooth Module
+1.3.1.1. Will be self contained and easily programmable
+1.3.1.2. Will not require a separate antenna
+1.3.1.3. Will have an effective range of at least 50 meters in environments with minimal interference
+1.3.1.4. Will be able to sleep and wake periodically as described in (1.2.1.2.1)
+
+1.3.2. Speaker
+1.3.2.1. Will generate a tone which is clearly audible from around 10 meters away
+1.3.2.2. Will be controlled by the Bluetooth module's processor
+
+1.3.3. Battery
+1.3.3.1. Will be rechargeable
+1.3.3.2. Will power the device for several hours while operating in the active state described in (1.2.1.1)
+1.3.3.3. Will be charged via the port described in (1.1.2.1)
+
+1.4. Tolerances
+1.4.1. Device will operate within any environment typical of a temperate or moderate climate
+1.4.2. Device will be water-resistant if not water-proof
+1.4.3. Device adhesive will remain effective in typical environments when attached to smooth, firm surfaces
+1.4.4. Device will be resilient to physical shock and impact
+
+2. Application
+2.1. User Interface
+2.1.1. Device Registration View
+2.1.1.1. Will show a list of all devices registered with the Application
+2.1.1.2. Devices will have a user-customizable identifier
+2.1.1.3. Will show devices which are unregistered but within communications range of the device upon which the Application is running
+2.1.1.4. Will allow the user to add unregistered devices to the registered list
+
+2.1.2. Device Location View
+2.1.2.1. Will be associated with a specific device
+2.1.2.2. Will show that device's identifier somewhere on the screen
+2.1.2.3. Will use a meter to visualize the detected signal strength of the device currently in focus
+2.1.2.4. Once within communications range, a button will appear within the view to allow the user to toggle the speaker on the Device which is currently in focus
+
+2.2. Device Communications
+2.2.1. Two-way communications range
+2.2.1.1. Application will send a confirmation signal to the device once it has been successfully registered
+2.2.1.2. Application will periodically ping the device to discern if it is still within range
+2.2.1.3. Application will send a toggle signal whenever the user presses the speaker toggle button
+
+2.2.2. One-way communications range
+2.2.2.1. Application will periodically ping the device to see if it has come into range
+2.2.2.2. Application will listen for the Device's pings to discern location based on signal strength
+
+2.2.3. Out of range
+2.2.3.1. After a timeout period has elapsed the Application will mark a registered Device as “Out of Range”
+2.2.3.2. If a Ping is received from a registered Device marked “Out of Range”, it will be marked as “In Range”, and it's signal strength should be made available to the user to view
+
+2.3. Platform compatibility
+2.3.1. Will be available for any Bluetooth-enabled Android Device through the Google Play Store
+2.3.2. Will be available for any Bluetooth-enabled iOS Device through the App Store
