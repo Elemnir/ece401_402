@@ -1,3 +1,5 @@
 venv
+config.bash
 *.swp
 *.pyc
+*.db
