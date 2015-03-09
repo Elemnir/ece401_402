@@ -1,6 +1,8 @@
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import reciever
+from datetime                   import timedelta
+from django.utils               import timezone
+from django.db                  import models
+from django.db.models.signals   import post_save
+from django.dispatch            import reciever
 from django.contrib.auth.models import user
 
 class Account(models.Model):
@@ -16,7 +18,10 @@ class Peer(models.Model):
     peer_id     = models.CharField(max_length=20)
     peer_ip     = models.CharField(max_length=256)
     peer_port   = models.IntegerField()
-    online      = models.BooleanField(default=False)
+    last_seen   = models.DateTimeField(auto_now=True)
+    
+    def is_online(self):
+        return self.last_seen >= timezone.now() - timedelta(minutes=1)
 
 class Share(models.Model):
     share_name  = models.CharField(max_length=256, required=False)

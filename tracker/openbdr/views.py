@@ -17,11 +17,13 @@ def tracker(request):
             plrf = PeerListRequestForm(request.GET)
             if plrf.is_valid():
                 qs = plrf.process()
-                qs = qs.filter(online__exact=True)
-                res['peers'] = [{'peer id':i.peer_id, 
+                res['peers'] = [{
+                    'peer id':i.peer_id, 
                     'ip':i.peer_ip, 
-                    'port':i.peer_port} for i in qs]
-                res['interval'] = 30
+                    'port':i.peer_port
+                    } for i in qs if i.is_online()
+                ]
+                res['interval'] = 55
             else:
                 raise Http404()
     except Http404:

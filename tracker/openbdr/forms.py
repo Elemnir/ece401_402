@@ -34,7 +34,6 @@ class PeerListRequestForm(forms.Form):
         share = get_object_or_404(Share, info_hash=cd.get('info_hash','')
         peer = get_object_or_404(Peer, peer_id=cd.get('peer_id','')
 
-        peer.online = True
         peer.peer_ip = cd.get('ip','')
         peer.peer_port = cd['port']
         peer.save()
