@@ -1,0 +1,6 @@
+- Ignore all hidden files (.file) and soft links
+- Test all combinations of file deletion/creation etc.
+    - VERY LITTLE TESTING DONE SO FAR
+- Move the responsibility of checking for changes from
+the directory_tree to the inotify library
+- TODOs which are listed in individual files
