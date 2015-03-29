@@ -54,4 +54,15 @@ def update_share(request):
     if request.method != 'POST':
         raise Http404()
 
-    
+    suf = ShareUpdateForm(request.POST, request.FILES)
+    if suf.is_valid():
+        # Update the share and add a new history entry
+        share = ShareHist.objects.get(info_hash=request.POST['old_hash']).share
+        share.info_hash = request.POST['info_hash']
+        share.phile = request.FILES['share_file']
+        share.save()
+        ShareHist(share=share,info_hash=request.POST['info_hash']).save()
+        return HttpResponse('Update Successful', content_type="text/plain")
+
+    raise Http404()
+
