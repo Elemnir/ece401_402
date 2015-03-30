@@ -31,9 +31,4 @@ class Share(models.Model):
     info_hash   = models.CharField(max_length=20)
     share_owner = models.ForeignKey(Account)
     peer_list   = models.ManyToManyField(Peer, blank=True)
-    share_file  = models.FileField(upload_to=file_path)
-
-class ShareHist(models.Model):
-    share       = models.ForeignKey(Share)
-    info_hash   = models.CharField(max_length=20)
-    created     = models.DateTimeField(auto_now_add=True)
+    share_file  = models.FileField(upload_to=file_path, blank=True)

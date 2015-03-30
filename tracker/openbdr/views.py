@@ -1,10 +1,11 @@
 from django.shortcuts               import render, get_object_or_404
 from django.http                    import (Http404, HttpResponse, 
                                             HttpResponseNotModified)
+from django.views.decorators.csrf   import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from bencode                        import bencode
-from openbdr.models                 import Account, Peer, Share, ShareHist
-from openbdr.forms                  import PeerListRequestForm
+from bencode                        import encode
+from openbdr.models                 import Account, Peer, Share
+from openbdr.forms                  import PeerListRequestForm, ShareUpdateForm
 
 @login_required
 def profile(request):
@@ -31,19 +32,18 @@ def tracker(request):
     except Http404:
         res['failure reason'] = 'poorly formed request'
 
-    resb = bencode(res)
+    resb = encode(res)
     return HttpResponse(resb, content_type="text/plain")
 
 def read_share(request):
     """Access point for Utilities to check for updates to the share file"""
-    sh = get_object_or_404(ShareHist, info_hash=request.GET.get('info_hash',''))
-    share = sh.share
+    share = get_object_or_404(Share, id=request.GET.get('share_id',''))
     peer = get_object_or_404(Peer, peer_id=request.GET.get('peer_id',''))
 
     if peer not in share.peer_list:
         raise Http404()
 
-    if share.info_hash == sh.info_hash:
+    if share.info_hash == request.GET.get('info_hash',''):
         return HttpResponseNotModified()
 
     return HttpResponse(share.phile, content_type="text/plain")
@@ -57,11 +57,10 @@ def update_share(request):
     suf = ShareUpdateForm(request.POST, request.FILES)
     if suf.is_valid():
         # Update the share and add a new history entry
-        share = ShareHist.objects.get(info_hash=request.POST['old_hash']).share
+        share = Share.objects.get(id=request.POST['share_id'])
         share.info_hash = request.POST['info_hash']
         share.phile = request.FILES['share_file']
         share.save()
-        ShareHist(share=share,info_hash=request.POST['info_hash']).save()
         return HttpResponse('Update Successful', content_type="text/plain")
 
     raise Http404()
