@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.core.files.base     import ContentFile
 from django.core.urlresolvers   import reverse
 from django.test                import TestCase, Client
-from bencode                    import bencode
 
 VALID_PEER_ID_1 = '12345678901234567890'
 VALID_PEER_ID_2 = '1234abcde01234567890'
@@ -25,7 +24,7 @@ class TrackerTest(TestCase):
         num_tests = 4
         c = Client()
 
-        # Test for single peer content
+        # Test for single peer
         r = c.get(reverse('openbdr_tracker'), {
                     'info_hash' : SHARE_INFO_HASH,
                     'peer_id'   : VALID_PEER_ID_1,
@@ -36,13 +35,14 @@ class TrackerTest(TestCase):
                     'ip'        : '1.1.1.1',
                 })
         self.assertEquals(r.status_code, 200)
-        self.assertTrue()
-        print "Passed 1/{}".format(num_tests)
+        self.assertTrue(VALID_PEER_ID_1 in r.content)
+        print "Passed 1/{}: Test for single peer".format(num_tests)
         
-        # Test for two peer content
+        # Test for two peers
         p2 = Peer.objects.create(peer_name='bill', peer_id=VALID_PEER_ID_2, 
                 peer_ip='2.2.2.2', peer_port='67890')
         Share.objects.get(pk=1).peer_list.add(p2)
+
         r = c.get(reverse('openbdr_tracker'), {
                     'info_hash' : SHARE_INFO_HASH,
                     'peer_id'   : VALID_PEER_ID_2,
@@ -53,7 +53,9 @@ class TrackerTest(TestCase):
                     'ip'        : '2.2.2.2',
                 })
         self.assertEquals(r.status_code, 200)
-        print "Passed 2/{}".format(num_tests)
+        self.assertTrue(VALID_PEER_ID_1 in r.content)
+        self.assertTrue(VALID_PEER_ID_2 in r.content)
+        print "Passed 2/{}: Test for two peers".format(num_tests)
 
         # Test for disallowed peer id
         r = c.get(reverse('openbdr_tracker'), {
@@ -66,7 +68,7 @@ class TrackerTest(TestCase):
                     'ip'        : '1.1.1.1',
                 })
         self.assertTrue('failure reason' in r.content)
-        print "Passed 3/{}".format(num_tests)
+        print "Passed 3/{}: Test for disallowed peer id".format(num_tests)
 
         # Test for unknown info_hash
         r = c.get(reverse('openbdr_tracker'), {
@@ -79,4 +81,4 @@ class TrackerTest(TestCase):
                     'ip'        : '2.2.2.2',
                 })
         self.assertTrue('failure reason' in r.content)
-        print "Passed 4/{}".format(num_tests)
+        print "Passed 4/{}: Test for unknown info_hash".format(num_tests)

@@ -1,7 +1,7 @@
 from django                 import forms
 from django.http            import Http404
 from django.shortcuts       import get_object_or_404
-from openbdr.models         import Share, ShareHist, Peer
+from openbdr.models         import Share, Peer
 
 class PeerListRequestForm(forms.Form):
     info_hash   = forms.CharField(max_length=20)
