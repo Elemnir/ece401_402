@@ -51,7 +51,7 @@ class ShareUpdateForm(forms.Form):
         cd = super(PeerListRequestForm, self).clean()
         
         # Get the associated share and its list of authorized peers
-        share = get_object_or_404(Share, id=cd.get('share_id',''))
+        share = get_object_or_404(Share, pk=cd.get('share_id',''))
         auth_peers = share.peer_list.get_queryset().values('peer_id')
         auth_peers = [str(d['peer_id']) for d in auth_peers]
 

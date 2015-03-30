@@ -37,7 +37,7 @@ def tracker(request):
 
 def read_share(request):
     """Access point for Utilities to check for updates to the share file"""
-    share = get_object_or_404(Share, id=request.GET.get('share_id',''))
+    share = get_object_or_404(Share, pk=request.GET.get('share_id',''))
     peer = get_object_or_404(Peer, peer_id=request.GET.get('peer_id',''))
 
     if peer not in share.peer_list:
@@ -57,7 +57,7 @@ def update_share(request):
     suf = ShareUpdateForm(request.POST, request.FILES)
     if suf.is_valid():
         # Update the share
-        share = Share.objects.get(id=request.POST['share_id'])
+        share = Share.objects.get(pk=request.POST['share_id'])
         share.info_hash = request.POST['info_hash']
         share.phile = request.FILES['share_file']
         share.save()

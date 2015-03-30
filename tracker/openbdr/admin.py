@@ -25,7 +25,7 @@ class ShareAdmin(admin.ModelAdmin):
         'share_name', 'info_hash', 'share_owner', 
         'peer_list', 'share_file'
     )})]
-    list_display = ('share_name', 'info_hash', 
-        'share_owner'
+    list_display = ('pk', 'share_name', 
+        'info_hash', 'share_owner'
     )
 admin.site.register(Share, ShareAdmin)

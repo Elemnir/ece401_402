@@ -23,6 +23,9 @@ class Peer(models.Model):
     peer_port   = models.IntegerField()
     last_seen   = models.DateTimeField(auto_now=True)
     
+    def __unicode__(self):
+        return unicode(self.peer_name)
+
     def is_online(self):
         return self.last_seen >= timezone.now() - timedelta(minutes=1)
 
@@ -35,3 +38,6 @@ class Share(models.Model):
     share_owner = models.ForeignKey(Account)
     peer_list   = models.ManyToManyField(Peer, blank=True)
     share_file  = models.FileField(upload_to=file_path, blank=True)
+
+    def __unicode__(self):
+        return unicode(self.share_name)
