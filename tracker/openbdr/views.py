@@ -56,7 +56,7 @@ def update_share(request):
 
     suf = ShareUpdateForm(request.POST, request.FILES)
     if suf.is_valid():
-        # Update the share and add a new history entry
+        # Update the share
         share = Share.objects.get(id=request.POST['share_id'])
         share.info_hash = request.POST['info_hash']
         share.phile = request.FILES['share_file']

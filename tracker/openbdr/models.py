@@ -7,6 +7,9 @@ from django.contrib.auth.models import User
 
 class Account(models.Model):
     user = models.ForeignKey(User, unique=True)
+    
+    def __unicode__(self):
+        return unicode(self.user)
 
 @receiver(post_save, sender=User)
 def create_account_for_user(sender, instance, created, **kwargs):

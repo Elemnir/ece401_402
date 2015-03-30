@@ -82,3 +82,7 @@ class TrackerTest(TestCase):
                 })
         self.assertTrue('failure reason' in r.content)
         print "Passed 4/{}: Test for unknown info_hash".format(num_tests)
+
+class ReadShareTest(TestCase):
+    def test(self):
+        pass

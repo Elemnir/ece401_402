@@ -11,7 +11,7 @@ class PeerAdmin(admin.ModelAdmin):
     class Meta:
         model = Peer
     fieldsets = [('Peer', {'fields': (
-        'id', 'peer_name', 'peer_id',
+        'peer_name', 'peer_id',
         'peer_ip', 'peer_port',
     )})]
     list_display = ('peer_name', 'peer_id', 'peer_ip')
@@ -22,8 +22,8 @@ class ShareAdmin(admin.ModelAdmin):
     class Meta:
         model = Share
     fieldsets = [('Share', {'fields': (
-        'id', 'share_name', 'info_hash',
-        'share_owner', 'peer_list', 'share_file'
+        'share_name', 'info_hash', 'share_owner', 
+        'peer_list', 'share_file'
     )})]
     list_display = ('share_name', 'info_hash', 
         'share_owner'
