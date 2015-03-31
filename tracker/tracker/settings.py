@@ -42,7 +42,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(BASE_DIR), 'templates'),
+    os.path.join(BASE_DIR, 'templates'),
 )
 
 STATIC_URL = '/static/'

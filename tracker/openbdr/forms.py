@@ -1,6 +1,7 @@
 from django                 import forms
 from django.http            import Http404
 from django.shortcuts       import get_object_or_404
+from django.core.exceptions import ValidationError
 from openbdr.models         import Share, Peer
 
 class PeerListRequestForm(forms.Form):
@@ -61,3 +62,27 @@ class ShareUpdateForm(forms.Form):
 
         return cd
 
+class AddPeerForm(forms.ModelForm):
+    class Meta:
+        model = Peer
+        fields = ('peer_name', 'peer_id')
+
+class RemovePeerForm(forms.Form):
+    peer_id = forms.CharField(max_length=20)
+
+class AddPeerToShareForm(forms.Form):
+    peer_name = forms.CharField(max_length=256, required=False)
+    peer_id = form.CharField(max_length=20)
+    share_id = forms.ChoiceField(Share.objects.all())
+
+class RemovePeerFromShareForm(forms.Form):
+    peer_id = forms.CharField(max_length=20)
+    share_id = forms.ChoiceField(Share.objects.all())
+
+class AddShareForm(forms.ModelForm):
+    class Meta:
+        model = Share
+        fields = ('share_name', 'share_owner', 'peer_list')
+
+class RemoveShareForm(forms.Form):
+    share_id = forms.ChoiceField(Share.objects.all())

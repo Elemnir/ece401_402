@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2> Log into your account</h2>
+{% if form.errors %}
+<p>Invalid Email Address and Password Combination.</p>
+{% endif %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+    <div class="fieldWrapper">
+        <label class="formField" for="id_username">Email:</label><br>
+        {{ form.username }}
+    </div>
+    <br>
+    <div class="fieldWrapper">
+        <label class="formField" for="id_password">Password:</label><br>
+        {{ form.password }}
+    </div>
+    <br>
+    <div class="fieldWrapper">
+        <input type="submit" value="Login" />
+    </div>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+{% endblock %}
+
