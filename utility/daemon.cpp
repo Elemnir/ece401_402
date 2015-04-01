@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include "boost/filesystem.hpp"
 #include "inotify.hpp"
+
+namespace fs = boost::filesystem;
 
 
 /* Create a file descriptor timer and return the file descriptor */
@@ -13,8 +16,8 @@ int create_timer(int interval);
 int main(int argc, const char* argv[])
 {
     Inotify notify;
-    std::vector<std::string> watched_directories;
-    int timer_fd, bytes_read, update_interval = 1;
+    std::vector<fs::path> watched_directories;
+    int timer_fd, bytes_read, update_interval = 3;
     char buffer[1024];
 
     // Check that at least one directory is passed as an argument
@@ -25,9 +28,11 @@ int main(int argc, const char* argv[])
 
     // Watch directories passed in on command line
     for (int i=1; i<argc; i++) {
-        std::string directory = argv[i];
-        watched_directories.push_back(directory);
-        notify.WatchDirectory(directory);
+        fs::path directory(argv[i]);
+        fs::path canonical_directory = fs::canonical(directory);
+        watched_directories.push_back(canonical_directory);
+        notify.AddWatchRecursive(canonical_directory);
+        printf("Watching %s\n", canonical_directory.c_str());
     }
 
     // Create timer
@@ -45,15 +50,16 @@ int main(int argc, const char* argv[])
 
         // Check status of each watched directory
         for(unsigned int i=0; i<watched_directories.size(); i++) {
-            std::string directory = watched_directories[i];
-            enum UPDATE_FLAG flag = notify.GetUpdateFlag(directory);
+            fs::path w_directory = watched_directories[i];
+            enum UPDATE_FLAG flag = notify.GetUpdateFlag(w_directory);
 
             if (flag == MODIFIED) {
                 // update torrent
-                printf("%s: MODIFIED\n", directory.c_str());
+                printf("%s: MODIFIED\n", w_directory.c_str());
             }
-            else if (flag == DELETED) {
+            else if (flag == DOESNOTEXIST) {
                 // do something
+                printf("%s: DOESNOTEXIST\n", w_directory.c_str());
             }
         }
     }

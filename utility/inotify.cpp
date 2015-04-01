@@ -15,39 +15,6 @@ namespace fs = boost::filesystem;
 /* Private Methods */
 /*******************/
 
-int Inotify::AddWatchRecursive(fs::path pathname, int parent_watch_descriptor = -1)
-{
-    int root_wd, wd, parent_wd;
-    std::queue<int> q;
-    fs::path path;
-    fs::directory_iterator end_itr;  // default construction yields past the end
-
-    // Create a watch for the pathname
-    root_wd = CreateWatch(pathname);
-    directory_tree_.InsertNode(root_wd, pathname, parent_watch_descriptor);
-    q.push(root_wd);
-
-    // Add watches for all nested directories recursively 
-    while (!q.empty()) {
-        parent_wd = q.front();
-        q.pop();
-
-        path = directory_tree_.GetPath(parent_wd);
-
-        for (fs::directory_iterator itr(path); itr != end_itr; ++itr) {
-            if (fs::is_directory(itr->status())) {
-                wd = CreateWatch(itr->path());
-                directory_tree_.InsertNode(wd, itr->path(), parent_wd);
-
-                q.push(wd);
-            }
-        }
-    }
-
-    return root_wd;
-}
-
-
 int Inotify::CreateWatch(fs::path directory_path)
 {
     int watch_descriptor;
@@ -66,28 +33,15 @@ int Inotify::CreateWatch(fs::path directory_path)
     return watch_descriptor;
 }
 
-
 /*
-void Inotify::ReadEventsBlocking()
+void Inotify::RemoveWatch(int watch_descriptor)
 {
-    struct inotify_event *event;
-    int bytes_read;
-    char *p;
+    int ret;
 
-    while (1) {
-        bytes_read = read(inotify_fd_, &event_buffer_, BUF_SIZE);
-        if (bytes_read == -1) {
-            perror("read");
-            exit(EXIT_FAILURE);
-        }
-        //printf("Bytes Read: %d\n", bytes_read);
-
-        for (p = event_buffer_; p < event_buffer_ + bytes_read; ) {
-            event = (struct inotify_event *) p;
-            p += sizeof(struct inotify_event) + event->len;
-            ProcessEvent(event);
-        }
-        sleep(1);
+    ret = inotify_rm_watch(inotify_fd_, watch_descriptor);
+    if (ret == -1) {
+        perror("inotify_rm_watch");
+        exit(EXIT_FAILURE);
     }
 }
 */
@@ -104,33 +58,51 @@ void Inotify::ProcessEvent(struct inotify_event *event)
     // File/directory created in watched directory
     // File/directory moved into watched directory
     if ((event->mask & IN_CREATE) || (event->mask & IN_MOVED_TO)) {
-        if (event->mask & IN_ISDIR) { // if directory was created
-            fs::path directory_path = directory_tree_.GetPath(event->wd) / event->name;
-            AddWatchRecursive(directory_path, event->wd);
+        if (event->name[0] != '.') { // Ignore hidden files/directories
+            if (event->mask & IN_ISDIR) { // if directory was created
+                fs::path directory_path = directory_tree_.GetPath(event->wd) / event->name;
+                AddWatchRecursive(directory_path);
+            }
+            directory_tree_.SetModifyBit(event->wd);
+
+            //printf("(%d) %s: File/directory created or moved into directory\n",event->wd,
+            //      directory_tree_.GetPath(event->wd).c_str());
         }
-        directory_tree_.SetModifyBit(event->wd);
     }
 
     // File/directory deleted in watched directory
     // File/directory moved from watched directory
     if ((event->mask & IN_DELETE) || (event->mask & IN_MOVED_FROM)) {
-        directory_tree_.SetModifyBit(event->wd);
+        if (event->name[0] != '.') {    // ignore hidden files/directories
+            directory_tree_.SetModifyBit(event->wd);
+            //printf("(%d) %s: File/directory deleted or moved from directory\n",event->wd,
+            //       directory_tree_.GetPath(event->wd).c_str());
+        }
     }
+
+    // File modified in watched directory
+    if (event->mask & IN_MODIFY) {
+        if (event->name[0] != '.') {    // ignore hidden files/directories
+            directory_tree_.SetModifyBit(event->wd);
+            //printf("(%d) %s: File/directory modified\n",event->wd,
+            //      directory_tree_.GetPath(event->wd).c_str());
+        }
+    }
+
     
-    // Watched file/directory was itself deleted 
+    // Watched directory was itself deleted 
     // IMPORTANT: The watch is automatically removed when a directory is deleted
     if (event->mask & IN_DELETE_SELF) {
         directory_tree_.RemoveNode(event->wd);
     }
 
-    // File modified in watched directory
-    if (event->mask & IN_MODIFY) {
-        directory_tree_.SetModifyBit(event->wd);
-    }
 
+    // Watched directory was itself moved
     if (event->mask & IN_MOVE_SELF) {
     }
 
+    // Watch was remove explicitly (inotify_rm_watch) or automatically (file was
+    // deleted, or file system was unmounted)
     if (event->mask & IN_IGNORED) {
     }
 }
@@ -158,27 +130,43 @@ Inotify::~Inotify()
     }
 }
 
-
-void Inotify::WatchDirectory(std::string path)
+void Inotify::AddWatchRecursive(fs::path pathname)
 {
-    int watch_descriptor;
+    int root_watch_descriptor, watch_descriptor;
+    std::queue<fs::path> q;
+    fs::path parent_path, directory_path;
+    fs::directory_iterator end_itr;  // default construction yields past the end
 
-    fs::path directory_path(path);
-    watch_descriptor = AddWatchRecursive(directory_path, -1);
-    directory_to_watchd_[path] = watch_descriptor;
+    // Create a watch for the pathname
+    root_watch_descriptor = CreateWatch(pathname);
+    directory_tree_.AddNode(root_watch_descriptor, pathname);
+    q.push(pathname);
+
+    // Add watches for all nested directories recursively 
+    while (!q.empty()) {
+        parent_path = q.front();
+        q.pop();
+
+        for (fs::directory_iterator itr(parent_path); itr != end_itr; ++itr) {
+            if (fs::is_directory(itr->status())) {
+                directory_path = itr->path();
+                watch_descriptor = CreateWatch(directory_path);
+                directory_tree_.AddNode(watch_descriptor, directory_path);
+
+                q.push(directory_path);
+            }
+        }
+    }
 }
 
-
 //TODO: Handle exception
-enum UPDATE_FLAG Inotify::GetUpdateFlag(std::string pathname)
+enum UPDATE_FLAG Inotify::GetUpdateFlag(boost::filesystem::path directory_path)
 {
-    int watch_descriptor;
     enum UPDATE_FLAG flag;
 
-    watch_descriptor = directory_to_watchd_.at(pathname);
-    flag = directory_tree_.GetUpdateFlag(watch_descriptor);
-    if (flag != DELETED) {
-        directory_tree_.ResetModifyBit(watch_descriptor);
+    flag = directory_tree_.GetUpdateFlag(directory_path);
+    if (flag != DOESNOTEXIST) {
+        directory_tree_.ResetModifyBit(directory_path);
     }
 
     return flag;
@@ -191,6 +179,7 @@ void Inotify::ReadEvents()
     int bytes_read;
     char *p;
     unsigned int available, total_bytes_read;
+    //static unsigned int eventnum = 0;
 
     ioctl(inotify_fd_, FIONREAD, &available);
 
@@ -207,6 +196,7 @@ void Inotify::ReadEvents()
         for (p = event_buffer_; p < event_buffer_ + bytes_read; ) {
             event = (struct inotify_event *) p;
             p += sizeof(struct inotify_event) + event->len;
+            //printf("Event %d\n", eventnum++);
             ProcessEvent(event);
         }
     }

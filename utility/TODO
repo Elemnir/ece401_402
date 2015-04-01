@@ -1,6 +1,8 @@
-- Ignore all hidden files (.file) and soft links
-- Test all combinations of file deletion/creation etc.
-    - VERY LITTLE TESTING DONE SO FAR
-- Move the responsibility of checking for changes from
-the directory_tree to the inotify library
-- TODOs which are listed in individual files
+- Change the map in the directory tree to be keyed on boost::path rather
+than a string. Every time a boost::path is passed in it is converted to
+a string which is ineffecient.
+
+- In the directory tree, each node contains it's full path. This is not
+memory effecient. It would be more effecient to have each node only
+contain it's directory name and then create the full path by iterating
+over all of the node's ancestors. 
