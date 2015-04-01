@@ -65,24 +65,23 @@ class ShareUpdateForm(forms.Form):
 class AddPeerForm(forms.ModelForm):
     class Meta:
         model = Peer
-        fields = ('peer_name', 'peer_id')
+        fields = ('peer_name',)
 
 class RemovePeerForm(forms.Form):
     peer_id = forms.CharField(max_length=20)
 
 class AddPeerToShareForm(forms.Form):
-    peer_name = forms.CharField(max_length=256, required=False)
-    peer_id = form.CharField(max_length=20)
-    share_id = forms.ChoiceField(Share.objects.all())
+    peer_id = forms.CharField(max_length=20)
+    share_id = forms.ModelChoiceField(queryset=Share.objects.all())
 
 class RemovePeerFromShareForm(forms.Form):
     peer_id = forms.CharField(max_length=20)
-    share_id = forms.ChoiceField(Share.objects.all())
+    share_id = forms.ModelChoiceField(queryset=Share.objects.all())
 
 class AddShareForm(forms.ModelForm):
     class Meta:
         model = Share
-        fields = ('share_name', 'share_owner', 'peer_list')
+        fields = ('share_name',)
 
 class RemoveShareForm(forms.Form):
-    share_id = forms.ChoiceField(Share.objects.all())
+    share_id = forms.ModelChoiceField(queryset=Share.objects.all())

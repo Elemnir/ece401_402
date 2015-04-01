@@ -1,15 +1,17 @@
 from django.shortcuts               import render, get_object_or_404
 from django.http                    import (Http404, HttpResponse, 
-                                            HttpResponseNotModified)
+                                            HttpResponseNotModified, 
+                                            HttpResponseBadRequest)
 from django.views.decorators.csrf   import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from bencode                        import encode
-from openbdr.models                 import Account, Peer, Share
-from openbdr.forms                  import (PeerListRequestForm, ShareUpdateForm,
-                                            AddPeerForm, AddPeerToShareForm, 
-                                            AddShareForm, RemoveShareForm, 
-                                            RemovePeerFromShareForm, 
-                                            RemovePeerForm)
+from openbdr.models                 import (Account, Peer, Share, PeerID, 
+                                            genPeerIDBatch)
+from openbdr.forms                  import (PeerListRequestForm, 
+                                            ShareUpdateForm, AddPeerForm, 
+                                            AddPeerToShareForm, AddShareForm, 
+                                            RemoveShareForm, RemovePeerForm,
+                                            RemovePeerFromShareForm)
 
 @login_required
 def profile(request):
@@ -17,17 +19,33 @@ def profile(request):
     pass
 
 
+def get_peer_id():
+    pid = PeerID.objects.filter(avail=True).first()
+    
+    if pid == None:
+        genPeerIDBatch(10)
+        pid = PeerID.objects.filter(avail=True).first()
+    
+    pid.avail = False
+    pid.save()
+    return pid.value
+
+
 @login_required
 def add_peer(request):
     if request.method == 'POST':
         f = AddPeerForm(request.POST)
         if f.is_valid():
-            f.save()
-            return HttpResponse('Success', content_type='text/plain')
+            peer = f.save(commit = False)
+            peer.peer_id = get_peer_id()
+            peer.save()
+            return HttpResponse(str(peer.peer_id), content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = AddPeerForm()
 
-    return render('add_peer.html', {'form':f})
+    return render(request, 'add_peer.html', {'form':f})
 
 
 @login_required
@@ -35,13 +53,18 @@ def remove_peer(request):
     if request.method == 'POST':
         f = RemovePeerForm(request.POST)
         if f.is_valid():
-            Peer = get_object_or_404(Peer, peer_id=f.cleaned_data['peer_id'])
+            try:
+                peer = Peer.objects.get(peer_id=f.cleaned_data['peer_id'])
+            except:
+                return HttpResponseBadRequest()
             peer.delete()
             return HttpResponse('Success', content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = RemovePeerForm()
 
-    return render('remove_peer.html', {'form':f})
+    return render(request, 'remove_peer.html', {'form':f})
 
 
 @login_required
@@ -49,21 +72,19 @@ def add_peer_to_share(request):
     if request.method == 'POST':
         f = AddPeerToShareForm(request.POST)
         if f.is_valid():
-            share = Share.objects.get(pk=f.cleaned_data['share_id'])
+            share = Share.objects.get(pk=request.POST['share_id'])
             try:
                 peer = Peer.objects.get(peer_id=f.cleaned_data['peer_id'])
             except:
-                peer = Peer.objects.create(
-                    peer_name = f.cleaned_data.get('peer_name',''),
-                    peer_id = f.cleaned_data['peer_id']
-                )
-                peer.save()
+                return HttpResponseBadRequest()
             share.peer_list.add(peer)
             return HttpResponse('Success', content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = AddPeerToShareForm()
 
-    return render('add_peer_to_share.html', {'form':f})
+    return render(request, 'add_peer_to_share.html', {'form':f})
    
 
 @login_required
@@ -71,14 +92,20 @@ def remove_peer_from_share(request):
     if request.method == 'POST':
         f = RemovePeerFromShareForm(request.POST)
         if f.is_valid():
-            share = Share.objects.get(pk=f.cleaned_data['share_id'])
-            peer = get_object_or_404(Peer, peer_id=f.cleaned_data['peer_id'])
-            share.peer_list.remove(peer)
+            share = Share.objects.get(pk=request.POST['share_id'])
+            try:
+                peer = Peer.objects.get(peer_id=f.cleaned_data['peer_id'])
+                share.peer_list.remove(peer)
+            except:
+                return HttpResponseBadRequest()
+
             return HttpResponse('Success', content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = RemovePeerFromShareForm()
 
-    return render('remove_peer_from_share.html', {'form':f})
+    return render(request, 'remove_peer_from_share.html', {'form':f})
    
 
 @login_required
@@ -86,12 +113,16 @@ def add_share(request):
     if request.method == 'POST':
         f = AddShareForm(request.POST)
         if f.is_valid():
-            f.save()
-            return HttpResponse('Success', content_type='text/plain')
+            share = f.save(commit=False)
+            share.share_owner = Account.objects.get(user=request.user)
+            share.save()
+            return HttpResponse(str(share.pk), content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = AddShareForm()
 
-    return render('add_share.html', {'form':f})
+    return render(request, 'add_share.html', {'form':f})
 
 
 @login_required
@@ -99,14 +130,16 @@ def remove_share(request):
     if request.method == 'POST':
         f = RemoveShareForm(request.POST)
         if f.is_valid():
-            share = Share.objects.get(pk=f.cleaned_data['share_id'])
+            share = Share.objects.get(pk=request.POST['share_id'])
             share.peer_list.clear()
             share.delete()
             return HttpResponse('Success', content_type='text/plain')
+        else:
+            return HttpResponseBadRequest()
     else:
         f = RemoveShareForm()
 
-    return render('remove_share.html', {'form':f})
+    return render(request, 'remove_share.html', {'form':f})
 
 
 def tracker(request):
