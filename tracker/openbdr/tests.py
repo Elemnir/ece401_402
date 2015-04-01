@@ -24,6 +24,7 @@ class TrackerTest(TestCase):
     def test(self):
         num_tests = 4
         c = Client()
+        print "\nBeginning tests for \"/tracker/\""
 
         # Test for single peer
         r = c.get(reverse('openbdr_tracker'), {
@@ -70,7 +71,7 @@ class TrackerTest(TestCase):
                     'ip'        : '1.1.1.1',
                 })
         self.assertTrue('failure reason' in r.content)
-        print "Passed 3/{}: Test for disallowed peer id".format(num_tests)
+        print "Passed 3/{}: Test for disallowed Peer Id".format(num_tests)
 
         # Test for unknown info_hash
         r = c.get(reverse('openbdr_tracker'), {
@@ -83,7 +84,7 @@ class TrackerTest(TestCase):
                     'ip'        : '2.2.2.2',
                 })
         self.assertTrue('failure reason' in r.content)
-        print "Passed 4/{}: Test for unknown info_hash".format(num_tests)
+        print "Passed 4/{}: Test for unknown Info Hash".format(num_tests)
 
 
 class ReadShareTest(TestCase):
@@ -102,6 +103,7 @@ class ReadShareTest(TestCase):
         num_tests = 6
         c = Client()
         sh = Share.objects.first()
+        print "\nBeginning tests for \"/read_share/\""
 
         # Properly formatted request with Not Modified response
         r = c.get(reverse('openbdr_read_share'), {
@@ -110,7 +112,7 @@ class ReadShareTest(TestCase):
                     'peer_id'   : VALID_PEER_ID_1,
                 })
         self.assertEquals(r.status_code, 304)
-        print "Passed 1/{}: Proper format, Not modified".format(num_tests)
+        print "Passed 1/{}: Proper format: Same Info Hash".format(num_tests)
 
         # Properly formatted request with differing info hash
         r = c.get(reverse('openbdr_read_share'), {
@@ -120,7 +122,7 @@ class ReadShareTest(TestCase):
                 })
         self.assertEquals(r.status_code, 200)
         self.assertEquals(r.content, sh.share_file.read())
-        print "Passed 2/{}: Proper format, Modified".format(num_tests)
+        print "Passed 2/{}: Proper format: Differing Info Hash".format(num_tests)
 
         # Properly formatted request with invalid peer id
         r = c.get(reverse('openbdr_read_share'), {
@@ -129,7 +131,7 @@ class ReadShareTest(TestCase):
                     'peer_id'   : INVALID_PEER_ID,
                 })
         self.assertEquals(r.status_code, 404)
-        print "Passed 3/{}: Proper format, Invalid Peer ID".format(num_tests)
+        print "Passed 3/{}: Proper format: Invalid Peer ID".format(num_tests)
 
         # Improperly formatted request with no share id
         r = c.get(reverse('openbdr_read_share'), {
@@ -137,7 +139,7 @@ class ReadShareTest(TestCase):
                     'peer_id'   : VALID_PEER_ID_1,
                 })
         self.assertEquals(r.status_code, 404)
-        print "Passed 4/{}: Improper format, no Share ID".format(num_tests)
+        print "Passed 4/{}: Improper format: No Share ID".format(num_tests)
 
         # Improperly formatted request with no peer id
         r = c.get(reverse('openbdr_read_share'), {
@@ -145,7 +147,7 @@ class ReadShareTest(TestCase):
                     'info_hash' : OUTDATED_HASH_1,
                 })
         self.assertEquals(r.status_code, 404)
-        print "Passed 5/{}: Improper format, no Peer ID".format(num_tests)
+        print "Passed 5/{}: Improper format: No Peer ID".format(num_tests)
 
         # Properly formatted request with no info hash
         r = c.get(reverse('openbdr_read_share'), {
@@ -155,6 +157,83 @@ class ReadShareTest(TestCase):
         self.assertEquals(r.status_code, 200)
         sh.share_file.open()
         self.assertEquals(r.content, sh.share_file.read())
-        print "Passed 6/{}: Proper format, no Info Hash".format(num_tests)
+        print "Passed 6/{}: Proper format: No Info Hash".format(num_tests)
+
+class UpdateShareTest(TestCase):
+    def setUp(self):
+        u  = User.objects.create_user('username', 'user@name.com', 'password')
+        p1 = Peer.objects.create(peer_name='jeff', peer_id=VALID_PEER_ID_1, 
+                peer_ip='1.1.1.1', peer_port='12345')
+        sh = Share.objects.create(share_name='hello', info_hash=OUTDATED_HASH_1,
+                share_owner=Account.objects.get(user=u))
+        sh.share_file.save('test.torrent', ContentFile('Test Content')) 
+        sh.save()
+        sh.peer_list.add(p1)
+        sh.save()
+
+    def test(self):
+        num_tests = 5
+        c = Client()
+        sh = Share.objects.first()
+        print "\nBeginning tests for \"/update_share/\""
+
+        # Properly formatted update with authorized peer
+        with open('test.torrent','w') as f:
+            f.write('Different Content')
+        
+        with open('test.torrent','r') as f:
+            r = c.post(reverse('openbdr_update_share'), {
+                        'share_id'  : sh.pk,
+                        'info_hash' : SHARE_INFO_HASH,
+                        'peer_id'   : VALID_PEER_ID_1,
+                        'share_file': f
+                    })
+        self.assertEquals(r.status_code, 200)
+        print "Passed 1/{}: Proper format: Valid peer".format(num_tests)
+
+        # Properly formatted update with unauthorized peer
+        with open('test.torrent','w') as f:
+            f.write('Different Content')
+        
+        with open('test.torrent','r') as f:
+            r = c.post(reverse('openbdr_update_share'), {
+                        'share_id'  : sh.pk,
+                        'info_hash' : SHARE_INFO_HASH,
+                        'peer_id'   : INVALID_PEER_ID,
+                        'share_file': f
+                    })
+        self.assertEquals(r.status_code, 404)
+        print "Passed 2/{}: Proper format: Invalid peer".format(num_tests)
+
+        # Invalid request method
+        r = c.get(reverse('openbdr_update_share'), {
+                        'share_id'  : sh.pk,
+                        'info_hash' : SHARE_INFO_HASH,
+                        'peer_id'   : VALID_PEER_ID_1,
+                    })
+        self.assertEquals(r.status_code, 400)
+        print "Passed 3/{}: Invalid request method".format(num_tests)
+
+        # Imroperly formatted update with no file attached
+        r = c.post(reverse('openbdr_update_share'), {
+                    'share_id'  : sh.pk,
+                    'info_hash' : SHARE_INFO_HASH,
+                    'peer_id'   : VALID_PEER_ID_1
+                })
+        self.assertEquals(r.status_code, 400)
+        print "Passed 4/{}: Improper format: No file uploaded".format(num_tests)
+
+        # Improperly formatted update with unauthorized peer
+        with open('test.torrent','w') as f:
+            f.write('Different Content')
+        
+        with open('test.torrent','r') as f:
+            r = c.post(reverse('openbdr_update_share'), {
+                        'share_id'  : sh.pk,
+                        'peer_id'   : INVALID_PEER_ID,
+                        'share_file': f
+                    })
+        self.assertEquals(r.status_code, 404)
+        print "Passed 5/{}: Improper format: No Info Hash and Invalid peer".format(num_tests)
 
 

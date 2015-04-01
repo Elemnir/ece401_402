@@ -184,7 +184,7 @@ def read_share(request):
 def update_share(request):
     """Access point for Utilities to update the share"""
     if request.method != 'POST':
-        raise Http404()
+        return HttpResponseBadRequest()
 
     suf = ShareUpdateForm(request.POST, request.FILES)
     if suf.is_valid():
@@ -195,5 +195,5 @@ def update_share(request):
         share.save()
         return HttpResponse('Update Successful', content_type="text/plain")
 
-    raise Http404()
+    return HttpResponseBadRequest()
 

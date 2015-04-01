@@ -49,7 +49,7 @@ class ShareUpdateForm(forms.Form):
     share_file  = forms.FileField()
 
     def clean(self):
-        cd = super(PeerListRequestForm, self).clean()
+        cd = super(ShareUpdateForm, self).clean()
         
         # Get the associated share and its list of authorized peers
         share = get_object_or_404(Share, pk=cd.get('share_id',''))

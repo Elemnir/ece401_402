@@ -1,6 +1,7 @@
 venv
 media
 config.bash
+test.torrent
 *.swp
 *.pyc
 *.db
