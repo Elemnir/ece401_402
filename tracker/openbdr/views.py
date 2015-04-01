@@ -168,16 +168,16 @@ def tracker(request):
 
 def read_share(request):
     """Access point for Utilities to check for updates to the share file"""
-    share = get_object_or_404(Share, pk=request.GET.get('share_id',''))
+    share = get_object_or_404(Share, pk=int(request.GET.get('share_id',0)))
     peer = get_object_or_404(Peer, peer_id=request.GET.get('peer_id',''))
 
-    if peer not in share.peer_list:
+    if peer not in share.peer_list.get_queryset():
         raise Http404()
 
     if share.info_hash == request.GET.get('info_hash',''):
         return HttpResponseNotModified()
 
-    return HttpResponse(share.phile, content_type="text/plain")
+    return HttpResponse(share.share_file, content_type="text/plain")
 
 
 @csrf_exempt
@@ -191,7 +191,7 @@ def update_share(request):
         # Update the share
         share = Share.objects.get(pk=request.POST['share_id'])
         share.info_hash = request.POST['info_hash']
-        share.phile = request.FILES['share_file']
+        share.share_file = request.FILES['share_file']
         share.save()
         return HttpResponse('Update Successful', content_type="text/plain")
 

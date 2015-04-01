@@ -1,4 +1,5 @@
 venv
+media
 config.bash
 *.swp
 *.pyc
