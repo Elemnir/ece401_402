@@ -98,9 +98,13 @@ class ReadShareTest(TestCase):
         sh.save()
         sh.peer_list.add(p1)
         sh.save()
+        s2 = Share.objects.create(share_name='blah', info_hash=OUTDATED_HASH_1,
+                share_owner=Account.objects.get(user=u))
+        s2.peer_list.add(p1)
+        s2.save()
 
     def test(self):
-        num_tests = 6
+        num_tests = 7
         c = Client()
         sh = Share.objects.first()
         print "\nBeginning tests for \"/read_share/\""
@@ -158,6 +162,17 @@ class ReadShareTest(TestCase):
         sh.share_file.open()
         self.assertEquals(r.content, sh.share_file.read())
         print "Passed 6/{}: Proper format: No Info Hash".format(num_tests)
+        
+        # Properly formatted request with no file field
+        s2 = Share.objects.get(share_name="blah")
+        r = c.get(reverse('openbdr_read_share'), {
+                    'share_id'  : s2.pk,
+                    'info_hash' : SHARE_INFO_HASH,
+                    'peer_id'   : VALID_PEER_ID_1,
+                })
+        self.assertEquals(r.status_code, 204)
+        print "Passed 7/{}: Proper format: No Share File".format(num_tests)
+
 
 class UpdateShareTest(TestCase):
     def setUp(self):

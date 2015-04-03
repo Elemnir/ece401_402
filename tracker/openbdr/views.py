@@ -176,6 +176,9 @@ def read_share(request):
 
     if share.info_hash == request.GET.get('info_hash',''):
         return HttpResponseNotModified()
+    
+    if not share.share_file:
+        return HttpResponse(status=204)
 
     return HttpResponse(share.share_file, content_type="text/plain")
 
