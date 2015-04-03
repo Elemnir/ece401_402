@@ -13,4 +13,4 @@ directory_tree.o: directory_tree.cpp directory_tree.hpp
 	$(CC) $(CFLAGS) -c directory_tree.cpp
 
 clean:
-	rm -f daemon inotify.o directory_tree.o
+	rm -f daemon inotify.o directory_tree.o 
