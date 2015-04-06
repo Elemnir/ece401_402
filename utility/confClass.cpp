@@ -1,5 +1,6 @@
 /*Includes libtorrent wrapper functions, http curl functions, and configParsing*/
 /*Some of this stuff could use some re-working*/
+//to-do: fix memory leak of new directory tInfo in load
 
 #include "confClass.hpp"
 #include <fstream>
@@ -21,6 +22,9 @@
 
 /*Passed to libcurl to write HTTP responses to string*/
 size_t write_to_string(void *ptr, size_t size, size_t count, void * stream);
+
+/*Write the response torrent file to disk...*/
+size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream);
 
 /*prevent hidden files from being added to torrents*/
 bool file_filter(std::string const& f);
@@ -161,32 +165,32 @@ int confInfo::configParse(ifstream * fin){
 						return 1;
 					}
 				}
-//				libtorrent::lazy_entry e;
-//				int pos = -1;
-//				printf("decoding. recursion limit: %d total item count limit: %d\n", depth_limit, item_limit);
-//				ret = libtorrent::lazy_bdecode(&buf[0], &buf[0] + buf.size(), e, ec, &pos, depth_limit, item_limit);
+				//				libtorrent::lazy_entry e;
+				//				int pos = -1;
+				//				printf("decoding. recursion limit: %d total item count limit: %d\n", depth_limit, item_limit);
+				//				ret = libtorrent::lazy_bdecode(&buf[0], &buf[0] + buf.size(), e, ec, &pos, depth_limit, item_limit);
 
-//				if(ret != 0){
-//					fprintf(stderr, "failed to decode: '%s' at character: %d\n", ec.message().c_str(), pos);
-//					return 1;
-//				}
+				//				if(ret != 0){
+				//					fprintf(stderr, "failed to decode: '%s' at character: %d\n", ec.message().c_str(), pos);
+				//					return 1;
+				//				}
 
-//				libtorrent::torrent_info t(e, ec);
-				
-//				if(ec){
-//					fprintf(stderr, "%s\n", ec.message().c_str());
-//					return 1;
-//				}
+				//				libtorrent::torrent_info t(e, ec);
 
-//				e.clear();
-//				std::vector<char>().swap(buf);
+				//				if(ec){
+				//					fprintf(stderr, "%s\n", ec.message().c_str());
+				//					return 1;
+				//				}
 
-//				char ih[41];
-//				libtorrent::to_hex((char const*)&t.info_hash()[0], 20, ih);
-				
-//				printf("info hash strlen: %d info_hash: %s\n", strlen(ih), ih);
-//				printf("strlen: %d to_hex: %s\n", strlen(t.info_hash().to_string().c_str()), libtorrent::to_hex(t.info_hash().to_string()).c_str());
-//				printf("The string: %s\n", t.info_hash().to_string().c_str());
+				//				e.clear();
+				//				std::vector<char>().swap(buf);
+
+				//				char ih[41];
+				//				libtorrent::to_hex((char const*)&t.info_hash()[0], 20, ih);
+
+				//				printf("info hash strlen: %d info_hash: %s\n", strlen(ih), ih);
+				//				printf("strlen: %d to_hex: %s\n", strlen(t.info_hash().to_string().c_str()), libtorrent::to_hex(t.info_hash().to_string()).c_str());
+				//				printf("The string: %s\n", t.info_hash().to_string().c_str());
 
 				DI.insert(make_pair(newDI->directoryPath, newDI));
 			}
@@ -206,6 +210,9 @@ string confInfo::read_share(DirectoryInfo *DI){
 	/*Need to change to send w/ info_hash*/
 	/*Still works*/
 
+	printf("\nReading share for %s...\n", DI->torrentPath.c_str());
+	std::ofstream fout;
+
 	string response = "";
 	string s = "";
 	s+=trackerDomain;
@@ -216,7 +223,7 @@ string confInfo::read_share(DirectoryInfo *DI){
 	s+="&info_hash=";
 	s.append(DI->info_hash);
 
-	printf("\nread_share request string: %s\n", s.c_str());
+	//printf("\nread_share request string: %s\n", s.c_str());
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
@@ -233,15 +240,47 @@ string confInfo::read_share(DirectoryInfo *DI){
 			fprintf(stderr, "curl_easy_perform() GET failed: %s\n", curl_easy_strerror(res));
 		}
 
-		printf("\nThe response: %s\n\n", response.c_str());
+		//printf("\nThe response: %s\n\n", response.c_str());
 		curl_easy_cleanup(curl);
 	}
+
+	/*read_share responder*/
+	if(response != ""){
+		printf("\n%s not synced w/ tracker; synchronizing\n", DI->torrentPath.c_str());
+		fout.open(DI->torrentPath);
+		fout << response;
+		fout.close();
+
+		if(existingFile(DI->torrentPath)){
+			int ret = load_file(DI, 40 * 1000000);
+
+			if(ret == -1){
+				fprintf(stderr, "file too big, aborting\n");
+				/*Need to handle this error*/
+				return "problem";
+			}
+
+			if(ret != 0){
+				fprintf(stderr, "failed to load file \n");
+				/*Need to handle this error*/
+				return "problem";
+			}
+
+			printf("    ...success!\n");
+		}
+
+	}else{
+		printf("\n%s is synchronized.\n", DI->torrentPath.c_str());
+	}
+
 
 	return response;
 }
 
 /*Update a share on the tracker*/
 string confInfo::update_share(DirectoryInfo *DI){
+
+	printf("\nUpdating share for %s...\n", DI->torrentPath.c_str());
 
 	CURL *curl;
 	CURLcode res;
@@ -251,13 +290,13 @@ string confInfo::update_share(DirectoryInfo *DI){
 	std::string s = trackerDomain;
 	s+="update_share/";
 
-	printf("Here is s: %s\n", s.c_str());
-	printf("trying string: %s\n", DI->info_hash.c_str());
+	//printf("Here is s: %s\n", s.c_str());
+	//printf("trying string: %s\n", DI->info_hash.c_str());
 	if(curl){
-		
+
 		struct curl_httppost *post=NULL;
 		struct curl_httppost *last=NULL;
-		
+
 		curl_easy_setopt(curl, CURLOPT_URL, s.c_str());
 		curl_formadd(&post, &last, CURLFORM_COPYNAME, "peer_id", CURLFORM_COPYCONTENTS, peerID.c_str(), CURLFORM_END);
 		curl_formadd(&post, &last, CURLFORM_COPYNAME, "share_id", CURLFORM_COPYCONTENTS, DI->share_id.c_str(), CURLFORM_END);
@@ -286,6 +325,7 @@ size_t write_to_string(void *ptr, size_t size, size_t count, void * stream){
 	return size*count;
 }
 
+/*This creates a torrent file.. hopefully this is correct.*/
 int confInfo::torCreate(DirectoryInfo * DI){
 
 	int flags = 0;
@@ -299,7 +339,7 @@ int confInfo::torCreate(DirectoryInfo * DI){
 		fputs("no files specified.\n", stderr);
 		return 0;
 	}else{
-		printf("fs.num_files() > 0!\n");
+		printf("\nCreating new metainfo...\n");
 	}
 
 	libtorrent::create_torrent t(fs);
@@ -450,7 +490,7 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 	}
 
 	//libtorrent::torrent_info t(e, ec);
-	tInfo = new libtorrent::torrent_info(e, ec);//t;
+	DI->tInfo = new libtorrent::torrent_info(e, ec);//t;
 
 	if(ec){
 		fprintf(stderr, "%s\n", ec.message().c_str());
@@ -461,7 +501,7 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 	std::vector<char>().swap(buf);
 
 	char ih[41];
-	libtorrent::to_hex((char const*)&(*tInfo).info_hash()[0], 20, ih);
+	libtorrent::to_hex((char const*)&(*(DI->tInfo)).info_hash()[0], 20, ih);
 
 	//printf("info hash strlen: %d info_hash: %s\n", strlen(ih), ih);
 	//printf("strlen: %d to_hex: %s\n", strlen(tInfo->info_hash().to_string().c_str()), libtorrent::to_hex(tInfo->info_hash().to_string()).c_str());
@@ -480,3 +520,8 @@ bool existingFile (const std::string & name){
 	return (stat (name.c_str(), &buffer) == 0);
 }
 
+/*Write downloaded metainfo to disk*/
+size_t write_data(void *ptr, size_t size, size_t nmemb, FILE *stream){
+	size_t written = fwrite(ptr, size, nmemb, stream);
+	return written;
+}

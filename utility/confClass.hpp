@@ -16,6 +16,7 @@ class DirectoryInfo{
 		int scanRate;
 		string share_id;
 		string info_hash;
+		libtorrent::torrent_info *tInfo;
 };
 
 /*This is instantiated & filled while parsing configuration file*/
@@ -31,8 +32,6 @@ class confInfo{
 		string trackerDomain;
 		string trackerUsername;
 		string trackerPassword;
-
-		libtorrent::torrent_info *tInfo;
 
 		map<string, DirectoryInfo *> DI;
 
