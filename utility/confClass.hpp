@@ -15,7 +15,7 @@ class DirectoryInfo{
 		string directoryPath;
 		int scanRate;
 		string share_id;
-		unsigned char info_hash[20];
+		string info_hash;
 };
 
 /*This is instantiated & filled while parsing configuration file*/
@@ -31,6 +31,8 @@ class confInfo{
 		string trackerDomain;
 		string trackerUsername;
 		string trackerPassword;
+
+		libtorrent::torrent_info *tInfo;
 
 		map<string, DirectoryInfo *> DI;
 
@@ -48,4 +50,7 @@ class confInfo{
 
 		/*Starts a download given a session*/
 		int download_torrent(libtorrent::session *s, DirectoryInfo * DI);
+
+		/*load_file and store info_hash in the class*/
+		int load_file(DirectoryInfo *DI, int limit);
 };

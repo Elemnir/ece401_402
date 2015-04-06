@@ -48,7 +48,7 @@
 int create_timer(int interval);
 
 /*Does the file exist?*/
-bool existingFile (const std::string & name);
+bool existFile (const std::string & name);
 
 /*thread function for reading_shares*/
 void * read_share_timer(void * CI);
@@ -137,7 +137,7 @@ int main(int argc, const char* argv[])
 		/*This logic needs a clean-up; Need to read_share & update accordingly*/
 		/*If read_share detects no file, create one and update_share*/
 
-		if(!existingFile(mit->second->torrentPath)){
+		if(!existFile(mit->second->torrentPath)){
 
 			/*I should hit read_share here & see if torrent exists already*/
 
@@ -151,6 +151,9 @@ int main(int argc, const char* argv[])
 			printf("\nTorrent file already exists! Reading share for updates...\n");
 
 			string response = CI->read_share(mit->second);
+			
+			/*This was for testing*/
+			//response = CI->update_share(mit->second);
 			printf("\nRead share was successful! (Share not written here yet though)\n");
 		}
 	}
@@ -248,7 +251,7 @@ int create_timer(int interval)
 }
 
 /*Does the file exist?*/
-bool existingFile (const std::string & name){
+bool existFile (const std::string & name){
 
 	struct stat buffer;
 	return (stat (name.c_str(), &buffer) == 0);

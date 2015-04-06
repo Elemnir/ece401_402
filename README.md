@@ -5,6 +5,7 @@ Project Repository for ECE401
 
 -John; Big notes:
 
+	The daemon should be closed currently with cntl+c. This will signal the read_share thread & wait for it to finish.
 	
 	1.) Because of the way it's currently written, please have atleast one "/" in your directoryPath.
 		I'l fix that code later.
