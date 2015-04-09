@@ -204,7 +204,11 @@ int confInfo::configParse(ifstream * fin){
 /*Pings the read_share tracker url to get a share*/
 /*Need to change to send w/ info_hash*/
 /*Still works*/
-string confInfo::read_share(DirectoryInfo *DI){
+/*200 == update*/
+/*204 == no_content (no file on server)*/
+/*304 == same_file (no_modification)*/
+/*404 == validation error*/
+int confInfo::read_share(DirectoryInfo *DI){
 
 	/*Pings the read_share url to get a share*/
 	/*Need to change to send w/ info_hash*/
@@ -227,6 +231,7 @@ string confInfo::read_share(DirectoryInfo *DI){
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
+	int http_code = 0;
 
 	if(curl){
 		curl_easy_setopt(curl, CURLOPT_URL, s.c_str());
@@ -235,6 +240,8 @@ string confInfo::read_share(DirectoryInfo *DI){
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
 		res = curl_easy_perform(curl);
+
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
 		if(res != CURLE_OK){
 			fprintf(stderr, "curl_easy_perform() GET failed: %s\n", curl_easy_strerror(res));
@@ -245,7 +252,8 @@ string confInfo::read_share(DirectoryInfo *DI){
 	}
 
 	/*read_share responder*/
-	if(response != ""){
+	if(http_code == 200){
+//	if(response == ""){	
 		printf("\n%s not synced w/ tracker; synchronizing\n", DI->torrentPath.c_str());
 		fout.open(DI->torrentPath);
 		fout << response;
@@ -257,28 +265,32 @@ string confInfo::read_share(DirectoryInfo *DI){
 			if(ret == -1){
 				fprintf(stderr, "file too big, aborting\n");
 				/*Need to handle this error*/
-				return "problem";
+				return -1;
 			}
 
 			if(ret != 0){
 				fprintf(stderr, "failed to load file \n");
 				/*Need to handle this error*/
-				return "problem";
+				return -2;
 			}
 
 			printf("    ...success!\n");
 		}
 
-	}else{
+	}
+	if(http_code == 304){
 		printf("\n%s is synchronized.\n", DI->torrentPath.c_str());
 	}
 
 
-	return response;
+	return http_code;
 }
 
 /*Update a share on the tracker*/
-string confInfo::update_share(DirectoryInfo *DI){
+/*200 == works*/
+/*400 == poorly formed request*/
+/*404 == validation error*/
+int confInfo::update_share(DirectoryInfo *DI){
 
 	printf("\nUpdating share for %s...\n", DI->torrentPath.c_str());
 
@@ -289,6 +301,8 @@ string confInfo::update_share(DirectoryInfo *DI){
 
 	std::string s = trackerDomain;
 	s+="update_share/";
+
+	int http_code = 0;
 
 	//printf("Here is s: %s\n", s.c_str());
 	//printf("trying string: %s\n", DI->info_hash.c_str());
@@ -308,6 +322,8 @@ string confInfo::update_share(DirectoryInfo *DI){
 
 		res = curl_easy_perform(curl);
 
+		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+		
 		if(res != CURLE_OK){
 			fprintf(stderr, "curl_easy_perform() POST failed: %s\n", curl_easy_strerror(res));
 		}
@@ -316,7 +332,7 @@ string confInfo::update_share(DirectoryInfo *DI){
 		curl_formfree(post);
 	}
 
-	return response;
+	return http_code;
 }
 
 /*Passed to libcurl to write HTTP responses to string */
@@ -343,7 +359,9 @@ int confInfo::torCreate(DirectoryInfo * DI){
 	}
 
 	libtorrent::create_torrent t(fs);
-	t.add_tracker(trackerDomain.c_str());
+	std::string trackerDom = trackerDomain;
+	trackerDom+="tracker/";
+	t.add_tracker(trackerDom.c_str());
 	t.set_creator(trackerUsername.c_str());
 
 	/*set_piece_hashes requires the path of the directory containing the monitored directory..*/
@@ -384,14 +402,21 @@ int confInfo::torCreate(DirectoryInfo * DI){
 /*Need to finish this; stopped because info_hash isn't set*/
 int confInfo::download_torrent(libtorrent::session *s, DirectoryInfo * DI){
 
+	printf("\ndownloading... \n");
 	libtorrent::error_code ec;
 
 	libtorrent::add_torrent_params p;
 	p.save_path = DI->directoryPath;
-	p.ti = new libtorrent::torrent_info(DI->torrentPath, ec);
+	p.ti = new libtorrent::torrent_info(DI->torrentPath.c_str(), ec);
 	if(ec){
 		fprintf(stderr, "%s\n", ec.message().c_str());
 		return -1;
+	}
+
+	s->add_torrent(p, ec);
+	if(ec){
+		fprintf(stderr, "%s\n", ec.message().c_str());
+		return -2;
 	}
 
 	//char ih[41];

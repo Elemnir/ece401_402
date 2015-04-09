@@ -42,10 +42,10 @@ class confInfo{
 		int torCreate(DirectoryInfo *DI);
 
 		/*Pings the tracker read_share URL*/
-		string read_share(DirectoryInfo *DI);
+		int read_share(DirectoryInfo *DI);
 
 		/*Pings the tracker update_share URL*/
-		string update_share(DirectoryInfo *DI);
+		int update_share(DirectoryInfo *DI);
 
 		/*Starts a download given a session*/
 		int download_torrent(libtorrent::session *s, DirectoryInfo * DI);

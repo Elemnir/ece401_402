@@ -41,7 +41,7 @@
 #include "boost/filesystem.hpp"
 #include <curl/curl.h>
 #include <openssl/sha.h>
-
+#include "libtorrent/torrent_handle.hpp"
 /* Create a file descriptor timer and return the file descriptor */
 int create_timer(int interval);
 
@@ -70,6 +70,9 @@ int stopLoop = 0;
 namespace fs = boost::filesystem;
 
 pthread_mutex_t lock;
+libtorrent::torrent_status ts;
+libtorrent::torrent_handle th1;
+std::vector<libtorrent::announce_entry> announcers;
 int main(int argc, const char* argv[])
 {
 
@@ -126,6 +129,17 @@ int main(int argc, const char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	/*libtorrent; open session to communicate w/ peers*/
+	sess.listen_on(std::make_pair(6881, 6881), ec);
+
+	if(sess.is_listening()){
+		printf("Successfully listening!\n");	
+	}else{
+		fprintf(stderr, "unsuccessfully listening :(\n");
+	}
+	/*Not calling stop_upnp() anywhere or manually port mapping;*/
+//	sess.start_upnp();
+
 	/*Loop through directories found in config file...*/
 	/*Check for existing metainfo: if it does, does it need updates?*/
 	/*If it doesn't exist, create it!*/
@@ -152,10 +166,25 @@ int main(int argc, const char* argv[])
 			printf("\n%s not detected\n", mit->second->torrentPath.c_str());
 		
 			/*This is next*/
-			//string response = CI->read_share(mit->second);
+			int response = CI->read_share(mit->second);
 
-			if(!(CI->torCreate(mit->second))){
-				fprintf(stderr, "ERROR: unable to create metainfo.. continuing\n");
+			if(response == 204){
+				if(!(CI->torCreate(mit->second))){
+					fprintf(stderr, "ERROR: unable to create metainfo.. continuing\n");
+				}
+
+				int ret = CI->update_share(mit->second);
+				printf("ret: %d\n", ret);
+			}
+
+			if(response == 200){
+				
+				pthread_mutex_lock(&lock);
+				int ret = CI->download_torrent(&sess, mit->second);
+				if(ret != 0){
+					printf("ERROR: download_torrent failed\n");
+				}
+				pthread_mutex_unlock(&lock);
 			}
 
 		}else{
@@ -164,26 +193,54 @@ int main(int argc, const char* argv[])
 			printf("\n%s detected\n", mit->second->torrentPath.c_str());
 
 			pthread_mutex_lock(&lock);
-			string response = CI->read_share(mit->second);
+			int response = CI->read_share(mit->second);
+			if(response == 204){
+				int ret = CI->update_share(mit->second);
+				printf("ret: %d\n", ret);
+			}
+			if(response == 200){
+				int ret = CI->download_torrent(&sess, mit->second);
+				if(ret != 0){
+					printf("ERROR: download_torrent failed\n");
+				}
+			}
 			pthread_mutex_unlock(&lock);
 			/*This was for testing*/
 			//response = CI->update_share(mit->second);
 			//printf("\nRead share for %s in initialization loop... not checking result atm...\n", mit->second->directoryPath.c_str());
 		}
+
+		libtorrent::add_torrent_params p;
+		p.save_path = mit->second->directoryPath;
+		p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
+		if(ec){
+			fprintf(stderr, "%s\n", ec.message().c_str());
+			return 1;
+		}
+		announcers = p.ti->trackers();
+		//p.ti->add_tracker("http://home.elemnir.com:8000/tracker/",0);
+		p.flags = p.flag_auto_managed;
+		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
+		th1 = th;
+		ts = th.status();
+		if(ts.paused){
+			printf("torrent is paused. resuming\n");
+			th.resume();
+		}
+		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
+		if(ec){
+			fprintf(stderr, "%s\n", ec.message().c_str());
+			return 1;
+		}
+
 	}
 
 	printf("\n/******* Init Complete *******/\n");
-
-	/*libtorrent; open session to communicate w/ peers*/
-	sess.listen_on(std::make_pair(6881, 6889), ec);
 
 	if(ec){
 		fprintf(stderr, "failed to open listen socket: %s\n", ec.message().c_str());
 		exit(EXIT_FAILURE);
 	}
-
-	/*Not calling stop_upnp() anywhere or manually port mapping;*/
-	sess.start_upnp();
 
 	if(pthread_create(&tcb, NULL, read_share_timer, CI) != 0){
 		perror("read_share_timer");
@@ -198,6 +255,21 @@ int main(int argc, const char* argv[])
 
 		printf("\nModification checker loop tick\n");
 		fflush(stdout);
+		ts = th1.status();
+		announcers = th1.trackers();
+		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
+
+		printf("announcers!: \n");
+		for(int i=0; i<announcers.size(); i++){
+			printf("url: %s\n",announcers[i].url.c_str());
+
+			printf("next_announce: %d\n", announcers[i].next_announce_in());
+			printf("min_announce_in: %d\n", announcers[i].min_announce_in());
+			printf("server message: %s\n", announcers[i].message.c_str());
+			if(announcers[i].last_error){
+				fprintf(stderr, "error?: %s\n", announcers[i].last_error.message().c_str());
+			}
+		}
 
 		bytes_read = read(timer_fd, &buffer, 1024);
 		if (bytes_read == -1) {
@@ -226,15 +298,15 @@ int main(int argc, const char* argv[])
 				}else{
 
 					pthread_mutex_lock(&lock);
-					std::string response = CI->update_share(CI->DI[directory]);
+					int response = CI->update_share(CI->DI[directory]);
 
 					/*Need to handle this..*/
-					if(response != "Update Successful"){
+					if(response != 200){
 						fprintf(stderr,"ERROR: tracker update unsuccessful...\n");
 					}else{
 						printf("\nSuccessfully updated: %s\n", w_directory.c_str());
 					}
-					
+
 					pthread_mutex_unlock(&lock);
 				}
 			}
@@ -298,13 +370,17 @@ void * read_share_timer(void * CI){
 		sleep(60);
 
 		printf("\nread_share_timer tick\n");
-		
+
 		for(mit = ci->DI.begin(); mit != ci->DI.end(); mit++){
 
 			pthread_mutex_lock(&lock);
-			string response = ci->read_share(mit->second);
+			int response = ci->read_share(mit->second);
+			if(response == 204){
+				int ret = ci->update_share(mit->second);
+				printf("ret: %d\n", ret);
+			}
 			pthread_mutex_unlock(&lock);
-			
+
 		}
 
 		/*stopLoop is set in the cntl+c signal handler*/
@@ -319,7 +395,7 @@ void * read_share_timer(void * CI){
 void cntl_c_handler(int dummy){
 
 	signal(SIGINT, cntl_c_handler);
-	printf("\n\n/******* Shutting down *******/\n\nWaiting for next read_share_timer tick to end process...\n");
+	printf("\n\n/******* Shut down initialized  *******/\n\nWaiting for next read_share_timer tick to end process...\n");
 	stopLoop = 1;
 	if(pthread_join(tcb, &status) != 0){
 		perror("pthread_join");
@@ -342,7 +418,7 @@ void printWelcome(){
 }
 
 void printGoodbye(){
-	printf("\n\n   ______                ____             \n");
+	printf("\n\n/******* Shutting down *******/\n\n   ______                ____             \n");
 	printf("  / ____/___  ____  ____/ / /_  __  _____ \n");
 	printf(" / / __/ __ \\/ __ \\/ __  / __ \\/ / / / _ \\\n");
 	printf("/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /  __/\n");
