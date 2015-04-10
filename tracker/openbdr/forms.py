@@ -43,7 +43,7 @@ class PeerListRequestForm(forms.Form):
         return [ i for i in share.peer_list.get_queryset() if i.is_online ]
 
 class ShareUpdateForm(forms.Form):
-    info_hash   = forms.CharField(max_length=20)
+    info_hash   = forms.CharField(max_length=40)
     share_id    = forms.IntegerField()
     peer_id     = forms.CharField(max_length=20)
     share_file  = forms.FileField()
