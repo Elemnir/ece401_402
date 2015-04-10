@@ -527,7 +527,18 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 
 	char ih[41];
 	libtorrent::to_hex((char const*)&(*(DI->tInfo)).info_hash()[0], 20, ih);
+	
+	CURL *curl = curl_easy_init();
 
+	if(curl){
+		
+		char * urlEncoded = curl_easy_escape(curl, (*(DI->tInfo)).info_hash().to_string().c_str(),20);
+		if(urlEncoded){
+			printf("Encoded: %s\n", urlEncoded);
+			curl_free(urlEncoded);
+		}
+		curl_easy_cleanup(curl);
+	}
 	//printf("info hash strlen: %d info_hash: %s\n", strlen(ih), ih);
 	//printf("strlen: %d to_hex: %s\n", strlen(tInfo->info_hash().to_string().c_str()), libtorrent::to_hex(tInfo->info_hash().to_string()).c_str());
 	//printf("The string: %s\n", tInfo->info_hash().to_string().c_str());

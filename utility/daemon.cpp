@@ -37,6 +37,7 @@
 #include "libtorrent/create_torrent.hpp"
 #include "libtorrent/file_pool.hpp"
 #include "libtorrent/session.hpp"
+#include "libtorrent/sha1_hash.hpp"
 #include "confClass.hpp"
 #include "boost/filesystem.hpp"
 #include <curl/curl.h>
@@ -86,12 +87,14 @@ int main(int argc, const char* argv[])
 
 	/*libtorrent variables*/
 	libtorrent::session sess;
+	libtorrent::session_settings sessSet;
 	libtorrent::error_code ec;
 	std::string creator_str = "libtorrent";
 	std::string comment_str;
 	std::string outfile;
 	std::string merklefile;
 	std::map<string, DirectoryInfo *>::iterator mit;
+
 
 	/*General Variables*/
 	std::vector<fs::path> watched_directories;
@@ -129,6 +132,14 @@ int main(int argc, const char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
+	/*set libtorrent settings*/
+	//sessSet.user_agent = CI->peerID;
+	libtorrent::sha1_hash sHash(CI->peerID);
+	libtorrent::peer_id pid= sHash;
+	sess.set_peer_id(pid);
+	sessSet.announce_ip = "76.123.235.77";
+	sess.set_settings(sessSet);
+	
 	/*libtorrent; open session to communicate w/ peers*/
 	sess.listen_on(std::make_pair(6881, 6881), ec);
 
@@ -223,11 +234,9 @@ int main(int argc, const char* argv[])
 		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
 		th1 = th;
 		ts = th.status();
-		if(ts.paused){
-			printf("torrent is paused. resuming\n");
-			th.resume();
-		}
+	
 		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
+		
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
 			return 1;
