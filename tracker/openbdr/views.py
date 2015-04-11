@@ -5,6 +5,7 @@ from django.http                    import (Http404, HttpResponse,
 from django.views.decorators.csrf   import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from bencode                        import encode
+from urllib                         import unquote
 from openbdr.models                 import (Account, Peer, Share, PeerID, 
                                             genPeerIDBatch)
 from openbdr.forms                  import (PeerListRequestForm, 
@@ -147,7 +148,9 @@ def tracker(request):
     res = {}
     try:
         if request.method == 'GET':
-            plrf = PeerListRequestForm(request.GET)
+            data = request.GET.copy()
+            data['info_hash'] = unquote(data.get('info_hash',''))
+            plrf = PeerListRequestForm(data)
             if plrf.is_valid():
                 qs = plrf.process()
                 res['peers'] = [{
@@ -174,12 +177,12 @@ def read_share(request):
     if peer not in share.peer_list.get_queryset():
         raise Http404()
 
-    if share.info_hash == request.GET.get('info_hash',''):
-        return HttpResponseNotModified()
-    
     if not share.share_file:
         return HttpResponse(status=204)
 
+    if share.info_hash == unquote(request.GET.get('info_hash','')):
+        return HttpResponseNotModified()
+    
     return HttpResponse(share.share_file, content_type="text/plain")
 
 
@@ -188,8 +191,10 @@ def update_share(request):
     """Access point for Utilities to update the share"""
     if request.method != 'POST':
         return HttpResponseBadRequest()
-
-    suf = ShareUpdateForm(request.POST, request.FILES)
+    
+    data = request.POST.copy()
+    data['info_hash'] = unquote(data.get('info_hash',''))
+    suf = ShareUpdateForm(data, request.FILES)
     if suf.is_valid():
         # Update the share
         share = Share.objects.get(pk=request.POST['share_id'])
