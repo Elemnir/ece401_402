@@ -530,12 +530,15 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 	
 	CURL *curl = curl_easy_init();
 
+	std::string encoded;
 	if(curl){
 		
 		char * urlEncoded = curl_easy_escape(curl, (*(DI->tInfo)).info_hash().to_string().c_str(),20);
 		if(urlEncoded){
 			printf("Encoded: %s\n", urlEncoded);
+			encoded.assign(urlEncoded);
 			curl_free(urlEncoded);
+
 		}
 		curl_easy_cleanup(curl);
 	}
@@ -543,8 +546,8 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 	//printf("strlen: %d to_hex: %s\n", strlen(tInfo->info_hash().to_string().c_str()), libtorrent::to_hex(tInfo->info_hash().to_string()).c_str());
 	//printf("The string: %s\n", tInfo->info_hash().to_string().c_str());
 
-	std::string hexer(ih);
-	DI->info_hash = hexer;
+	//std::string hexer(ih);
+	DI->info_hash = encoded;
 
 	return 0;
 }
