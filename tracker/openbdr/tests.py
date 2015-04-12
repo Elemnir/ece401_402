@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from django.core.files.base     import ContentFile
 from django.core.urlresolvers   import reverse
 from django.test                import TestCase, Client
+from urllib                     import quote, unquote
 
 VALID_PEER_ID_1 = '12345678901234567890'
 VALID_PEER_ID_2 = '1234abcde01234567890'
 INVALID_PEER_ID = 'abcdefghijklmnopqrst'
-SHARE_INFO_HASH = 'qwertyuiopasdfghjklz'
+
+SHARE_INFO_HASH = 'qw#$&%uiopasdfghjklz'
 OUTDATED_HASH_1 = 'asdfasdfasdfasdfasdf'
 
 class TrackerTest(TestCase):
@@ -37,6 +39,7 @@ class TrackerTest(TestCase):
                     'ip'        : '1.1.1.1',
                 })
         self.assertEquals(r.status_code, 200)
+        print r.content
         self.assertTrue(VALID_PEER_ID_1 in r.content)
         print "Passed 1/{}: Test for single peer".format(num_tests)
         
