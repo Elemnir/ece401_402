@@ -9,7 +9,7 @@ VALID_PEER_ID_1 = '12345678901234567890'
 VALID_PEER_ID_2 = '1234abcde01234567890'
 INVALID_PEER_ID = 'abcdefghijklmnopqrst'
 
-SHARE_INFO_HASH = 'qw#$&%uiopasdfghjklz'
+SHARE_INFO_HASH = 'qw#$&%uiopas&*^hjklz'
 OUTDATED_HASH_1 = 'asdfasdfasdfasdfasdf'
 
 class TrackerTest(TestCase):
@@ -17,7 +17,7 @@ class TrackerTest(TestCase):
         u  = User.objects.create_user('username', 'user@name.com', 'password')
         p1 = Peer.objects.create(peer_name='jeff', peer_id=VALID_PEER_ID_1, 
                 peer_ip='1.1.1.1', peer_port='12345')
-        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH,
+        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.encode('hex'),
                 share_owner=Account.objects.get(user=u))
         sh.save()
         sh.peer_list.add(p1)
@@ -95,7 +95,7 @@ class ReadShareTest(TestCase):
         u  = User.objects.create_user('username', 'user@name.com', 'password')
         p1 = Peer.objects.create(peer_name='jeff', peer_id=VALID_PEER_ID_1, 
                 peer_ip='1.1.1.1', peer_port='12345')
-        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH,
+        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.encode('hex'),
                 share_owner=Account.objects.get(user=u))
         sh.share_file.save('test.torrent', ContentFile('Test Content')) 
         sh.save()

@@ -149,8 +149,8 @@ def tracker(request):
     try:
         if request.method == 'GET':
             data = request.GET.copy()
-            #print data.get('info_hash','')
-            data['info_hash'] = data.get('info_hash','')
+            print data.get('info_hash','').encode('hex')
+            data['info_hash'] = data.get('info_hash','').encode('hex')
             plrf = PeerListRequestForm(data)
             if plrf.is_valid():
                 qs = plrf.process()
@@ -181,9 +181,9 @@ def read_share(request):
     if not share.share_file:
         return HttpResponse(status=204)
     
-    #print share.info_hash
-    #print request.GET.get('info_hash', '')
-    if share.info_hash == request.GET.get('info_hash',''):
+    print share.info_hash
+    print request.GET.get('info_hash', '').encode('hex')
+    if share.info_hash == request.GET.get('info_hash','').encode('hex'):
         return HttpResponseNotModified()
     
     return HttpResponse(share.share_file, content_type="text/plain")
@@ -196,12 +196,13 @@ def update_share(request):
         return HttpResponseBadRequest()
     
     data = request.POST.copy()
-    data['info_hash'] = data.get('info_hash','')
+    data['info_hash'] = data.get('info_hash','').encode('hex')
     suf = ShareUpdateForm(data, request.FILES)
     if suf.is_valid():
         # Update the share
         share = Share.objects.get(pk=request.POST['share_id'])
-        share.info_hash = request.POST['info_hash']
+        print request.POST['info_hash'].encode('hex')
+        share.info_hash = request.POST['info_hash'].encode('hex')
         share.share_file = request.FILES['share_file']
         share.save()
         return HttpResponse('Update Successful', content_type="text/plain")
