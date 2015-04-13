@@ -31,7 +31,7 @@ class Peer(models.Model):
 
     def is_online(self):
         return self.peer_port != -1 \
-            and self.last_seen >= timezone.now() - timedelta(minutes=1) 
+            and self.last_seen >= timezone.now() - timedelta(minutes=5) 
 
 
 def file_path(share, filename):

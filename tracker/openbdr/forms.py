@@ -9,14 +9,7 @@ class PeerListRequestForm(forms.Form):
     info_hash   = forms.CharField(max_length=100)
     peer_id     = forms.CharField(max_length=20)
     port        = forms.IntegerField()
-    uploaded    = forms.IntegerField()
-    downloaded  = forms.IntegerField()
-    left        = forms.IntegerField()
     ip          = forms.CharField(max_length=256, required=False)
-    numwant     = forms.IntegerField(required=False)
-    event       = forms.ChoiceField(required=False,
-        choices=(('started','str'),('stopped','stp'),('completed','cmp'))
-    )
 
     def clean(self):
         cd = super(PeerListRequestForm, self).clean()

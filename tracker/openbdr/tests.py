@@ -9,15 +9,17 @@ VALID_PEER_ID_1 = '12345678901234567890'
 VALID_PEER_ID_2 = '1234abcde01234567890'
 INVALID_PEER_ID = 'abcdefghijklmnopqrst'
 
-SHARE_INFO_HASH = 'qw#$&%uiopas&*^hjklz'
+SHARE_INFO_HASH = u'qw#$&%uiopas&*^hjklz'
 OUTDATED_HASH_1 = 'asdfasdfasdfasdfasdf'
+
+#SHARE_INFO_HASH = u'\xe2\x16N\xc23&\x17\x9ccxxd\xdf\x05\xfdm\xd6\xbf\x81\xa4'
 
 class TrackerTest(TestCase):
     def setUp(self):
         u  = User.objects.create_user('username', 'user@name.com', 'password')
         p1 = Peer.objects.create(peer_name='jeff', peer_id=VALID_PEER_ID_1, 
                 peer_ip='1.1.1.1', peer_port='12345')
-        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.encode('hex'),
+        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.upper().encode('utf-8').encode('hex'),
                 share_owner=Account.objects.get(user=u))
         sh.save()
         sh.peer_list.add(p1)
@@ -39,7 +41,6 @@ class TrackerTest(TestCase):
                     'ip'        : '1.1.1.1',
                 })
         self.assertEquals(r.status_code, 200)
-        print r.content
         self.assertTrue(VALID_PEER_ID_1 in r.content)
         print "Passed 1/{}: Test for single peer".format(num_tests)
         
@@ -95,7 +96,7 @@ class ReadShareTest(TestCase):
         u  = User.objects.create_user('username', 'user@name.com', 'password')
         p1 = Peer.objects.create(peer_name='jeff', peer_id=VALID_PEER_ID_1, 
                 peer_ip='1.1.1.1', peer_port='12345')
-        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.encode('hex'),
+        sh = Share.objects.create(share_name='hello', info_hash=SHARE_INFO_HASH.upper().encode('utf-8').encode('hex'),
                 share_owner=Account.objects.get(user=u))
         sh.share_file.save('test.torrent', ContentFile('Test Content')) 
         sh.save()
