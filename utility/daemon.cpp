@@ -38,11 +38,13 @@
 #include "libtorrent/file_pool.hpp"
 #include "libtorrent/session.hpp"
 #include "libtorrent/sha1_hash.hpp"
+#include "libtorrent/peer_info.hpp"
 #include "confClass.hpp"
 #include "boost/filesystem.hpp"
 #include <curl/curl.h>
 #include <openssl/sha.h>
 #include "libtorrent/torrent_handle.hpp"
+#include "boost/asio.hpp"
 /* Create a file descriptor timer and return the file descriptor */
 int create_timer(int interval);
 
@@ -74,6 +76,7 @@ pthread_mutex_t lock;
 libtorrent::torrent_status ts;
 libtorrent::torrent_handle th1;
 std::vector<libtorrent::announce_entry> announcers;
+std::vector<libtorrent::peer_info> peers;
 int main(int argc, const char* argv[])
 {
 
@@ -137,11 +140,12 @@ int main(int argc, const char* argv[])
 	libtorrent::sha1_hash sHash(CI->peerID);
 	libtorrent::peer_id pid= sHash;
 	sess.set_peer_id(pid);
-	sessSet.announce_ip = "76.123.235.77";
+	sessSet.announce_ip = "10.0.0.30";
+	sessSet.allow_multiple_connections_per_ip = true;
 	sess.set_settings(sessSet);
 	
 	/*libtorrent; open session to communicate w/ peers*/
-	sess.listen_on(std::make_pair(6881, 6881), ec);
+	sess.listen_on(std::make_pair(6882, 6882), ec);
 
 	if(sess.is_listening()){
 		printf("Successfully listening!\n");	
@@ -174,7 +178,7 @@ int main(int argc, const char* argv[])
 
 			/*I should hit read_share here & see if torrent exists already*/
 
-			printf("\n%s not detected\n", mit->second->torrentPath.c_str());
+//			printf("\n%s not detected\n", mit->second->torrentPath.c_str());
 		
 			/*This is next*/
 			int response = CI->read_share(mit->second);
@@ -232,9 +236,16 @@ int main(int argc, const char* argv[])
 		//p.ti->add_tracker("http://home.elemnir.com:8000/tracker/",0);
 		p.flags = p.flag_auto_managed;
 		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
+		printf("Just added %s to session...\n", mit->second->torrentPath.c_str());
+
+		if(ec){
+			fprintf(stderr, "%s\n", ec.message().c_str());
+			return 1;
+		}
 		th1 = th;
 		ts = th.status();
-	
+		th.get_peer_info(peers);
+
 		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
 		
 		if(ec){
@@ -266,10 +277,50 @@ int main(int argc, const char* argv[])
 		fflush(stdout);
 		ts = th1.status();
 		announcers = th1.trackers();
+		th1.get_peer_info(peers);
+		printf("numPeers: %u\n", peers.size());
+		
+		for(unsigned int k=0; k<peers.size(); k++){
+			//peers[k].
+			boost::asio::ip::address remote_ad = peers[k].ip.address();
+			unsigned short remote_port = peers[k].ip.port();
+			printf("	peer #%u ip: %s port: %hd\n", k, remote_ad.to_string().c_str(), remote_port);
+
+			if((peers[k].flags && 1) == 1){
+				printf("	peer #%u is interesting\n", k);
+			}
+			if((peers[k].flags && 2) == 2){
+				printf("	peer #%u is choked\n", k);
+			}
+			if((peers[k].flags && 4) == 4 ){
+				printf("	peer #%u is remote interested\n", k);
+			}
+			if((peers[k].flags && 8) == 8){
+				printf("	peer #%u is remote choked\n", k);
+			}
+			if((peers[k].flags && 16) == 16){
+				printf("	peer #%u is supporting extensions\n", k);
+			}
+			if((peers[k].flags && 32) == 32){
+				printf("	peer #%u is a local connection\n", k);
+			}
+			if((peers[k].flags && 64) == 64){
+				printf("	peer #%u is in handshake\n", k);
+			}
+			if((peers[k].flags && 128) == 128){
+				printf("	peer #%u is connecting\n", k);
+			}
+			if((peers[k].flags && 256) == 256){
+				printf("	peer #%u is queued\n", k);
+			}
+			
+
+		}
+
 		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
 
 		printf("announcers!: \n");
-		for(int i=0; i<announcers.size(); i++){
+		for(unsigned int i=0; i<announcers.size(); i++){
 			printf("url: %s\n",announcers[i].url.c_str());
 
 			printf("next_announce: %d\n", announcers[i].next_announce_in());
@@ -384,6 +435,7 @@ void * read_share_timer(void * CI){
 
 			pthread_mutex_lock(&lock);
 			int response = ci->read_share(mit->second);
+			printf("read_share return: %d\n", response);
 			if(response == 204){
 				int ret = ci->update_share(mit->second);
 				printf("ret: %d\n", ret);

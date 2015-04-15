@@ -227,7 +227,8 @@ int confInfo::read_share(DirectoryInfo *DI){
 	s+="&info_hash=";
 	s.append(DI->info_hash);
 
-	//printf("\nread_share request string: %s\n", s.c_str());
+
+	printf("\nread_share request string: %s\n", s.c_str());
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
