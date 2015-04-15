@@ -27,6 +27,7 @@
 #include <map>
 #include <pthread.h>
 #include <signal.h>
+#include <deque>
 #include "inotify.hpp"
 #include "libtorrent/entry.hpp"
 #include "libtorrent/bencode.hpp"
@@ -44,6 +45,7 @@
 #include <curl/curl.h>
 #include <openssl/sha.h>
 #include "libtorrent/torrent_handle.hpp"
+#include "libtorrent/alert.hpp"
 #include "boost/asio.hpp"
 /* Create a file descriptor timer and return the file descriptor */
 int create_timer(int interval);
@@ -77,6 +79,7 @@ libtorrent::torrent_status ts;
 libtorrent::torrent_handle th1;
 std::vector<libtorrent::announce_entry> announcers;
 std::vector<libtorrent::peer_info> peers;
+std::deque<libtorrent::alert *> alerts;
 int main(int argc, const char* argv[])
 {
 
@@ -97,7 +100,6 @@ int main(int argc, const char* argv[])
 	std::string outfile;
 	std::string merklefile;
 	std::map<string, DirectoryInfo *>::iterator mit;
-
 
 	/*General Variables*/
 	std::vector<fs::path> watched_directories;
@@ -140,7 +142,7 @@ int main(int argc, const char* argv[])
 	libtorrent::sha1_hash sHash(CI->peerID);
 	libtorrent::peer_id pid= sHash;
 	sess.set_peer_id(pid);
-	sessSet.announce_ip = "10.0.0.30";
+	sessSet.announce_ip = "10.0.0.28";
 	sessSet.allow_multiple_connections_per_ip = true;
 	sess.set_settings(sessSet);
 	
@@ -234,7 +236,7 @@ int main(int argc, const char* argv[])
 		}
 		announcers = p.ti->trackers();
 		//p.ti->add_tracker("http://home.elemnir.com:8000/tracker/",0);
-		p.flags = p.flag_auto_managed;
+		p.flags = p.flag_seed_mode;//p.flag_auto_managed;
 		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
 		printf("Just added %s to session...\n", mit->second->torrentPath.c_str());
 
@@ -276,8 +278,17 @@ int main(int argc, const char* argv[])
 		printf("\nModification checker loop tick\n");
 		fflush(stdout);
 		ts = th1.status();
+		
 		announcers = th1.trackers();
 		th1.get_peer_info(peers);
+		sess.pop_alerts(&alerts);
+		libtorrent::alert * alrt;
+		
+		for(int i=0; i<alerts.size(); i++){
+			alrt=alerts[i];
+			printf("\nalert: %s\n\n", alrt->message().c_str());
+		}
+		
 		printf("numPeers: %u\n", peers.size());
 		
 		for(unsigned int k=0; k<peers.size(); k++){
@@ -317,6 +328,8 @@ int main(int argc, const char* argv[])
 
 		}
 
+		printf("torrent state: %d torrent progress: %f\n", ts.state, ts.progress);
+		printf("num_peers: %d num_seeds: %d queue_po: %d connections_limit: %d\n", ts.num_peers, ts.num_seeds, ts.queue_position, ts.connections_limit);
 		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
 
 		printf("announcers!: \n");
