@@ -149,7 +149,10 @@ def tracker(request):
     try:
         if request.method == 'GET':
             data = request.GET.copy()
-            data['info_hash'] = unquote(data.get('info_hash',''))
+            print "Tracker: "
+            print data.get('info_hash','').upper().encode('utf-8').encode('hex')
+            #print Share.objects.first().info_hash
+            data['info_hash'] = data.get('info_hash','').upper().encode('utf-8').encode('hex')
             plrf = PeerListRequestForm(data)
             if plrf.is_valid():
                 qs = plrf.process()
@@ -159,13 +162,14 @@ def tracker(request):
                     'port':i.peer_port
                     } for i in qs if i.is_online()
                 ]
-                res['interval'] = 55
+                res['interval'] = 300
             else:
                 raise Http404()
     except Http404:
         res['failure reason'] = 'poorly formed request'
 
     resb = encode(res)
+    print resb
     return HttpResponse(resb, content_type="text/plain")
 
 
@@ -179,8 +183,10 @@ def read_share(request):
 
     if not share.share_file:
         return HttpResponse(status=204)
-
-    if share.info_hash == unquote(request.GET.get('info_hash','')):
+    
+    #print share.info_hash
+    #print request.GET.get('info_hash','').upper().encode('utf-8').encode('hex')
+    if share.info_hash == request.GET.get('info_hash','').upper().encode('utf-8').encode('hex'):
         return HttpResponseNotModified()
     
     return HttpResponse(share.share_file, content_type="text/plain")
@@ -192,13 +198,11 @@ def update_share(request):
     if request.method != 'POST':
         return HttpResponseBadRequest()
     
-    data = request.POST.copy()
-    data['info_hash'] = unquote(data.get('info_hash',''))
-    suf = ShareUpdateForm(data, request.FILES)
+    suf = ShareUpdateForm(request.POST, request.FILES)
     if suf.is_valid():
         # Update the share
         share = Share.objects.get(pk=request.POST['share_id'])
-        share.info_hash = request.POST['info_hash']
+        share.info_hash = unquote(request.POST['info_hash']).upper().encode('utf-8').encode('hex')
         share.share_file = request.FILES['share_file']
         share.save()
         return HttpResponse('Update Successful', content_type="text/plain")

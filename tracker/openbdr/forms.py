@@ -2,20 +2,14 @@ from django                 import forms
 from django.http            import Http404
 from django.shortcuts       import get_object_or_404
 from django.core.exceptions import ValidationError
+from urllib                 import quote, unquote
 from openbdr.models         import Share, Peer
 
 class PeerListRequestForm(forms.Form):
-    info_hash   = forms.CharField(max_length=20)
+    info_hash   = forms.CharField(max_length=100)
     peer_id     = forms.CharField(max_length=20)
     port        = forms.IntegerField()
-    uploaded    = forms.IntegerField()
-    downloaded  = forms.IntegerField()
-    left        = forms.IntegerField()
     ip          = forms.CharField(max_length=256, required=False)
-    numwant     = forms.IntegerField(required=False)
-    event       = forms.ChoiceField(required=False,
-        choices=(('started','str'),('stopped','stp'),('completed','cmp'))
-    )
 
     def clean(self):
         cd = super(PeerListRequestForm, self).clean()
@@ -43,7 +37,7 @@ class PeerListRequestForm(forms.Form):
         return [ i for i in share.peer_list.get_queryset() if i.is_online ]
 
 class ShareUpdateForm(forms.Form):
-    info_hash   = forms.CharField(max_length=40)
+    info_hash   = forms.CharField(max_length=100)
     share_id    = forms.IntegerField()
     peer_id     = forms.CharField(max_length=20)
     share_file  = forms.FileField()

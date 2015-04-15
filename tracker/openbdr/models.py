@@ -31,7 +31,7 @@ class Peer(models.Model):
 
     def is_online(self):
         return self.peer_port != -1 \
-            and self.last_seen >= timezone.now() - timedelta(minutes=1) 
+            and self.last_seen >= timezone.now() - timedelta(minutes=5) 
 
 
 def file_path(share, filename):
@@ -40,7 +40,7 @@ def file_path(share, filename):
 
 class Share(models.Model):
     share_name  = models.CharField(max_length=256, blank=True)
-    info_hash   = models.CharField(max_length=40)
+    info_hash   = models.CharField(max_length=100)
     share_owner = models.ForeignKey(Account)
     peer_list   = models.ManyToManyField(Peer, blank=True)
     share_file  = models.FileField(upload_to=file_path, blank=True)
