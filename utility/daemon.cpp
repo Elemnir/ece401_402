@@ -228,7 +228,8 @@ int main(int argc, const char* argv[])
 		}
 
 		libtorrent::add_torrent_params p;
-		p.save_path = mit->second->directoryPath;
+		printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
+		p.save_path = "/home/john/Desktop/";//mit->second->directoryPath;
 		p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
