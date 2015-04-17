@@ -79,6 +79,7 @@ libtorrent::torrent_status ts;
 std::vector<libtorrent::announce_entry> announcers;
 std::vector<libtorrent::peer_info> peers;
 std::deque<libtorrent::alert *> alerts;
+libtorrent::session sess;
 int main(int argc, const char* argv[])
 {
 
@@ -91,7 +92,6 @@ int main(int argc, const char* argv[])
 	Inotify notify;
 
 	/*libtorrent variables*/
-	libtorrent::session sess;
 	libtorrent::session_settings sessSet;
 	libtorrent::error_code ec;
 	std::string creator_str = "libtorrent";
@@ -141,18 +141,18 @@ int main(int argc, const char* argv[])
 	libtorrent::sha1_hash sHash(CI->peerID);
 	libtorrent::peer_id pid= sHash;
 	sess.set_peer_id(pid);
-	sessSet.announce_ip = "10.0.0.17";
+	sessSet.announce_ip = "10.0.0.28";
 	sessSet.allow_multiple_connections_per_ip = true;
 	sess.set_settings(sessSet);
 	
 	/*libtorrent; open session to communicate w/ peers*/
 	sess.listen_on(std::make_pair(6882, 6882), ec);
 
-	if(sess.is_listening()){
-		printf("Successfully listening!\n");	
-	}else{
-		fprintf(stderr, "unsuccessfully listening :(\n");
-	}
+//	if(sess.is_listening()){
+//		printf("Successfully listening!\n");	
+//	}else{
+//		fprintf(stderr, "unsuccessfully listening :(\n");
+//	}
 	/*Not calling stop_upnp() anywhere or manually port mapping;*/
 //	sess.start_upnp();
 
@@ -229,10 +229,16 @@ int main(int argc, const char* argv[])
 		/*Re-write this to work for multiple directories*/
 		libtorrent::add_torrent_params p;
 		
-		printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
+	//	printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
 		
-		p.save_path = "/home/john/Desktop/";//mit->second->directoryPath;
-		
+		std::string tmp = string(mit->second->directoryPath.rbegin(), mit->second->directoryPath.rend());
+		std::string::size_type n;
+		n = tmp.find('/', 0);
+		tmp = tmp.substr(n);
+		tmp = string(tmp.rbegin(), tmp.rend());
+
+		p.save_path = tmp;//"/home/john/Desktop/";//mit->second->directoryPath;
+
 		p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
 		
 		if(ec){
@@ -243,7 +249,7 @@ int main(int argc, const char* argv[])
 		p.flags = p.flag_auto_managed;
 		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
 		mit->second->t_handle = th;
-		printf("Just added %s to session...\n", mit->second->torrentPath.c_str());
+		printf("\nJust added %s to session...\n", mit->second->torrentPath.c_str());
 
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
@@ -350,7 +356,7 @@ int main(int argc, const char* argv[])
 
 			}
 
-			printf("\ntorrent state: %d torrent progress: %f\n", ts.state, ts.progress);
+			printf("\nDirectory: %s torrent state: %d torrent progress: %f\n", directory.c_str(), ts.state, ts.progress);
 			printf("num_peers: %d num_seeds: %d queue_po: %d connections_limit: %d\n", ts.num_peers, ts.num_seeds, ts.queue_position, ts.connections_limit);
 			printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
 
@@ -366,8 +372,7 @@ int main(int argc, const char* argv[])
 				}
 			}
 
-
-
+			/*need to remove a directory's t_handle here from the session; also need to add the new one..*/
 			if (flag == MODIFIED) {
 
 				// update torrent in here! (create updated metainfo & ping tracker w/ it)
@@ -452,11 +457,12 @@ void * read_share_timer(void * CI){
 
 		printf("\nread_share_timer tick\n");
 
+		/*need to remove a directory's t_handle here from the session; also need to add the new one..*/
 		for(mit = ci->DI.begin(); mit != ci->DI.end(); mit++){
 
 			pthread_mutex_lock(&lock);
 			int response = ci->read_share(mit->second);
-			printf("read_share return: %d\n", response);
+			printf("\nread_share return: %d\n", response);
 			if(response == 204){
 				int ret = ci->update_share(mit->second);
 				printf("ret: %d\n", ret);

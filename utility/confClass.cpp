@@ -228,7 +228,7 @@ int confInfo::read_share(DirectoryInfo *DI){
 	s.append(DI->info_hash);
 
 
-	printf("\nread_share request string: %s\n", s.c_str());
+	//printf("\nread_share request string: %s\n", s.c_str());
 	CURL *curl;
 	CURLcode res;
 	curl = curl_easy_init();
@@ -544,7 +544,7 @@ int confInfo::load_file(DirectoryInfo *DI, int limit = 8000000)
 		
 		char * urlEncoded = curl_easy_escape(curl, (*(DI->tInfo)).info_hash().to_string().c_str(),20);
 		if(urlEncoded){
-			printf("Encoded: %s\n", urlEncoded);
+			//printf("Encoded: %s\n", urlEncoded);
 			encoded.assign(urlEncoded);
 			curl_free(urlEncoded);
 
