@@ -407,7 +407,15 @@ int confInfo::download_torrent(libtorrent::session *s, DirectoryInfo * DI){
 	libtorrent::error_code ec;
 
 	libtorrent::add_torrent_params p;
-	p.save_path = DI->directoryPath;
+	
+	std::string tmp = string(DI->directoryPath.rbegin(), DI->directoryPath.rend());
+	std::string::size_type n;
+	n = tmp.find('/', 0);
+	tmp = tmp.substr(n);
+	tmp = string(tmp.rbegin(), tmp.rend());
+
+
+	p.save_path = tmp;
 	p.ti = new libtorrent::torrent_info(DI->torrentPath.c_str(), ec);
 	if(ec){
 		fprintf(stderr, "%s\n", ec.message().c_str());

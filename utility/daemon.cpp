@@ -76,7 +76,6 @@ namespace fs = boost::filesystem;
 
 pthread_mutex_t lock;
 libtorrent::torrent_status ts;
-libtorrent::torrent_handle th1;
 std::vector<libtorrent::announce_entry> announcers;
 std::vector<libtorrent::peer_info> peers;
 std::deque<libtorrent::alert *> alerts;
@@ -142,7 +141,7 @@ int main(int argc, const char* argv[])
 	libtorrent::sha1_hash sHash(CI->peerID);
 	libtorrent::peer_id pid= sHash;
 	sess.set_peer_id(pid);
-	sessSet.announce_ip = "10.0.0.28";
+	sessSet.announce_ip = "10.0.0.17";
 	sessSet.allow_multiple_connections_per_ip = true;
 	sess.set_settings(sessSet);
 	
@@ -197,10 +196,10 @@ int main(int argc, const char* argv[])
 			if(response == 200){
 				
 				pthread_mutex_lock(&lock);
-				int ret = CI->download_torrent(&sess, mit->second);
-				if(ret != 0){
-					printf("ERROR: download_torrent failed\n");
-				}
+				//int ret = CI->download_torrent(&sess, mit->second);
+				//if(ret != 0){
+				//	printf("ERROR: download_torrent failed\n");
+				//}
 				pthread_mutex_unlock(&lock);
 			}
 
@@ -216,10 +215,10 @@ int main(int argc, const char* argv[])
 				printf("ret: %d\n", ret);
 			}
 			if(response == 200){
-				int ret = CI->download_torrent(&sess, mit->second);
-				if(ret != 0){
-					printf("ERROR: download_torrent failed\n");
-				}
+				//int ret = CI->download_torrent(&sess, mit->second);
+				//if(ret != 0){
+				//	printf("ERROR: download_torrent failed\n");
+				//}
 			}
 			pthread_mutex_unlock(&lock);
 			/*This was for testing*/
@@ -227,29 +226,29 @@ int main(int argc, const char* argv[])
 			//printf("\nRead share for %s in initialization loop... not checking result atm...\n", mit->second->directoryPath.c_str());
 		}
 
+		/*Re-write this to work for multiple directories*/
 		libtorrent::add_torrent_params p;
+		
 		printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
+		
 		p.save_path = "/home/john/Desktop/";//mit->second->directoryPath;
+		
 		p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
+		
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
 			return 1;
 		}
-		announcers = p.ti->trackers();
-		//p.ti->add_tracker("http://home.elemnir.com:8000/tracker/",0);
-		p.flags = p.flag_seed_mode;//p.flag_auto_managed;
+		
+		p.flags = p.flag_auto_managed;
 		libtorrent::torrent_handle th = sess.add_torrent(p, ec);
+		mit->second->t_handle = th;
 		printf("Just added %s to session...\n", mit->second->torrentPath.c_str());
 
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
 			return 1;
 		}
-		th1 = th;
-		ts = th.status();
-		th.get_peer_info(peers);
-
-		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
 		
 		if(ec){
 			fprintf(stderr, "%s\n", ec.message().c_str());
@@ -278,73 +277,17 @@ int main(int argc, const char* argv[])
 
 		printf("\nModification checker loop tick\n");
 		fflush(stdout);
-		ts = th1.status();
-		
-		announcers = th1.trackers();
-		th1.get_peer_info(peers);
+				
+		/*Checking Session alerts*/
 		sess.pop_alerts(&alerts);
 		libtorrent::alert * alrt;
 		
-		for(int i=0; i<alerts.size(); i++){
+		for(unsigned int i=0; i<alerts.size(); i++){
 			alrt=alerts[i];
 			printf("\nalert: %s\n\n", alrt->message().c_str());
+//			delete alrt;
 		}
-		
-		printf("numPeers: %u\n", peers.size());
-		
-		for(unsigned int k=0; k<peers.size(); k++){
-			//peers[k].
-			boost::asio::ip::address remote_ad = peers[k].ip.address();
-			unsigned short remote_port = peers[k].ip.port();
-			printf("	peer #%u ip: %s port: %hd\n", k, remote_ad.to_string().c_str(), remote_port);
-
-			if((peers[k].flags && 1) == 1){
-				printf("	peer #%u is interesting\n", k);
-			}
-			if((peers[k].flags && 2) == 2){
-				printf("	peer #%u is choked\n", k);
-			}
-			if((peers[k].flags && 4) == 4 ){
-				printf("	peer #%u is remote interested\n", k);
-			}
-			if((peers[k].flags && 8) == 8){
-				printf("	peer #%u is remote choked\n", k);
-			}
-			if((peers[k].flags && 16) == 16){
-				printf("	peer #%u is supporting extensions\n", k);
-			}
-			if((peers[k].flags && 32) == 32){
-				printf("	peer #%u is a local connection\n", k);
-			}
-			if((peers[k].flags && 64) == 64){
-				printf("	peer #%u is in handshake\n", k);
-			}
-			if((peers[k].flags && 128) == 128){
-				printf("	peer #%u is connecting\n", k);
-			}
-			if((peers[k].flags && 256) == 256){
-				printf("	peer #%u is queued\n", k);
-			}
-			
-
-		}
-
-		printf("torrent state: %d torrent progress: %f\n", ts.state, ts.progress);
-		printf("num_peers: %d num_seeds: %d queue_po: %d connections_limit: %d\n", ts.num_peers, ts.num_seeds, ts.queue_position, ts.connections_limit);
-		printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
-
-		printf("announcers!: \n");
-		for(unsigned int i=0; i<announcers.size(); i++){
-			printf("url: %s\n",announcers[i].url.c_str());
-
-			printf("next_announce: %d\n", announcers[i].next_announce_in());
-			printf("min_announce_in: %d\n", announcers[i].min_announce_in());
-			printf("server message: %s\n", announcers[i].message.c_str());
-			if(announcers[i].last_error){
-				fprintf(stderr, "error?: %s\n", announcers[i].last_error.message().c_str());
-			}
-		}
-
+	
 		bytes_read = read(timer_fd, &buffer, 1024);
 		if (bytes_read == -1) {
 			perror("read");
@@ -360,6 +303,70 @@ int main(int argc, const char* argv[])
 			fs::path w_directory = watched_directories[i];
 			std::string directory = watched_directories2[i];
 			enum UPDATE_FLAG flag = notify.GetUpdateFlag(w_directory);
+
+			DirectoryInfo * DI = CI->DI[directory];
+
+			/*Convert this into loop for all monitored directories*/
+			ts = DI->t_handle.status();
+			announcers = DI->t_handle.trackers();
+			DI->t_handle.get_peer_info(peers);
+
+			printf("\nnumPeers: %u\n", peers.size());
+
+			for(unsigned int k=0; k<peers.size(); k++){
+				//peers[k].
+				boost::asio::ip::address remote_ad = peers[k].ip.address();
+				unsigned short remote_port = peers[k].ip.port();
+				printf("	peer #%u ip: %s port: %hd\n", k, remote_ad.to_string().c_str(), remote_port);
+
+				if((peers[k].flags && 1) == 1){
+					printf("	peer #%u is interesting\n", k);
+				}
+				if((peers[k].flags && 2) == 2){
+					printf("	peer #%u is choked\n", k);
+				}
+				if((peers[k].flags && 4) == 4 ){
+					printf("	peer #%u is remote interested\n", k);
+				}
+				if((peers[k].flags && 8) == 8){
+					printf("	peer #%u is remote choked\n", k);
+				}
+				if((peers[k].flags && 16) == 16){
+					printf("	peer #%u is supporting extensions\n", k);
+				}
+				if((peers[k].flags && 32) == 32){
+					printf("	peer #%u is a local connection\n", k);
+				}
+				if((peers[k].flags && 64) == 64){
+					printf("	peer #%u is in handshake\n", k);
+				}
+				if((peers[k].flags && 128) == 128){
+					printf("	peer #%u is connecting\n", k);
+				}
+				if((peers[k].flags && 256) == 256){
+					printf("	peer #%u is queued\n", k);
+				}
+
+
+			}
+
+			printf("\ntorrent state: %d torrent progress: %f\n", ts.state, ts.progress);
+			printf("num_peers: %d num_seeds: %d queue_po: %d connections_limit: %d\n", ts.num_peers, ts.num_seeds, ts.queue_position, ts.connections_limit);
+			printf("Error?: %s\ntracker?: %s\n",ts.error.c_str(), ts.current_tracker.c_str());
+
+			printf("\nTorrent announcers: \n");
+			for(unsigned int i=0; i<announcers.size(); i++){
+				printf("	url: %s\n",announcers[i].url.c_str());
+
+				printf("	next_announce: %d\n", announcers[i].next_announce_in());
+				printf("	min_announce_in: %d\n", announcers[i].min_announce_in());
+				printf("	server message: %s\n", announcers[i].message.c_str());
+				if(announcers[i].last_error){
+					fprintf(stderr, "	error?: %s\n", announcers[i].last_error.message().c_str());
+				}
+			}
+
+
 
 			if (flag == MODIFIED) {
 

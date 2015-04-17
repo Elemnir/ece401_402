@@ -17,6 +17,7 @@ class DirectoryInfo{
 		string share_id;
 		string info_hash;
 		libtorrent::torrent_info *tInfo;
+		libtorrent::torrent_handle t_handle;
 };
 
 /*This is instantiated & filled while parsing configuration file*/
