@@ -379,12 +379,38 @@ int main(int argc, const char* argv[])
 				printf("    %s: MODIFIED\n", directory.c_str());
 
 				/*First, hit read_share for update if there is one. Else, torCreate and update_share*/
-				if(!(CI->torCreate(CI->DI[directory]))){
+				if(!(CI->torCreate(DI))){
 					printf("\nThere was a problem updating the torrent file.\n");
 				}else{
 
 					pthread_mutex_lock(&lock);
-					int response = CI->update_share(CI->DI[directory]);
+					sess.remove_torrent(DI->t_handle, 0);//libtorrent::session::delete_files);
+					/*Need to add_torrent_params*/
+					libtorrent::add_torrent_params p;
+
+					//	printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
+
+					std::string tmp = string(DI->directoryPath.rbegin(), DI->directoryPath.rend());
+					std::string::size_type n;
+					n = tmp.find('/', 0);
+					tmp = tmp.substr(n);
+					tmp = string(tmp.rbegin(), tmp.rend());
+
+					p.save_path = tmp;//"/home/john/Desktop/";//mit->second->directoryPath;
+
+					p.ti = new libtorrent::torrent_info(DI->torrentPath.c_str(), ec);
+
+					if(ec){
+						fprintf(stderr, "%s\n", ec.message().c_str());
+						return -1;
+					}
+
+					p.flags = p.flag_auto_managed;
+					libtorrent::torrent_handle th = sess.add_torrent(p, ec);
+					mit->second->t_handle = th;
+
+
+					int response = CI->update_share(DI);
 
 					/*Need to handle this..*/
 					if(response != 200){
@@ -448,6 +474,7 @@ void * read_share_timer(void * CI){
 
 	std::ofstream fout;
 	std::map<string, DirectoryInfo *>::iterator mit;
+	libtorrent::error_code ec;
 
 	confInfo * ci = (confInfo *)CI;
 
@@ -463,10 +490,37 @@ void * read_share_timer(void * CI){
 			pthread_mutex_lock(&lock);
 			int response = ci->read_share(mit->second);
 			printf("\nread_share return: %d\n", response);
+			sess.remove_torrent(mit->second->t_handle, 0);//libtorrent::session::delete_files);
 			if(response == 204){
 				int ret = ci->update_share(mit->second);
 				printf("ret: %d\n", ret);
 			}
+
+			/*Need to add_torrent_params*/
+			libtorrent::add_torrent_params p;
+
+			//	printf("directoryPath: %s\n", mit->second->directoryPath.c_str());
+
+			std::string tmp = string(mit->second->directoryPath.rbegin(), mit->second->directoryPath.rend());
+			std::string::size_type n;
+			n = tmp.find('/', 0);
+			tmp = tmp.substr(n);
+			tmp = string(tmp.rbegin(), tmp.rend());
+
+			p.save_path = tmp;//"/home/john/Desktop/";//mit->second->directoryPath;
+
+			p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
+
+			if(ec){
+				fprintf(stderr, "%s\n", ec.message().c_str());
+				return NULL;
+			}
+
+			p.flags = p.flag_auto_managed;
+			libtorrent::torrent_handle th = sess.add_torrent(p, ec);
+			mit->second->t_handle = th;
+			printf("\nJust added %s to session...\n", mit->second->torrentPath.c_str());
+
 			pthread_mutex_unlock(&lock);
 
 		}
