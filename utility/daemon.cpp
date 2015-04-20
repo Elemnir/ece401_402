@@ -407,7 +407,7 @@ int main(int argc, const char* argv[])
 
 					p.flags = p.flag_auto_managed;
 					libtorrent::torrent_handle th = sess.add_torrent(p, ec);
-					mit->second->t_handle = th;
+					DI->t_handle = th;
 
 
 					int response = CI->update_share(DI);
@@ -512,15 +512,14 @@ void * read_share_timer(void * CI){
 			p.ti = new libtorrent::torrent_info(mit->second->torrentPath.c_str(), ec);
 
 			if(ec){
-				fprintf(stderr, "%s\n", ec.message().c_str());
-				return NULL;
-			}
+				fprintf(stderr, "%s\nSkipping to next read_share...", ec.message().c_str());
+			}else{
 
 			p.flags = p.flag_auto_managed;
 			libtorrent::torrent_handle th = sess.add_torrent(p, ec);
 			mit->second->t_handle = th;
 			printf("\nJust added %s to session...\n", mit->second->torrentPath.c_str());
-
+			}
 			pthread_mutex_unlock(&lock);
 
 		}
