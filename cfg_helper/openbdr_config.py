@@ -1,6 +1,6 @@
 __author__ = 'Jeremy Rogers'
 
-import ConfigParser
+import configparser
 import sys
 import os
 import commtracker
@@ -146,7 +146,7 @@ def setup(conf):
     print('Add shares with \'python3 openbdr_config.py addshare\'')
 
 
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 
 if not os.path.exists('~/.btfs'):
     os.makedirs('~/.btfs')
