@@ -1,6 +1,6 @@
 __author__ = 'Jeremy Rogers'
 
-import configparser
+import ConfigParser
 import sys
 import os
 import commtracker
@@ -61,7 +61,7 @@ def setpeer(conf):
     conf['daemon']['PeerName'] = peername
 
 
-def registerpeer(conf, pw):
+def registerpeer(conf, password):
     peername = conf.get('daemon', 'PeerName', fallback='')
     if peername == '':
         print('No peer name in config file. Run \'python3 openbdr_config.py setpeer\' to set one.')
@@ -72,7 +72,7 @@ def registerpeer(conf, pw):
         print('No domain name in config file. Run \'python3 openbdr_config.py setdomain\' to set one.')
         sys.exit(1)
 
-    username = conf.get('network', 'TrackerUsername', fallback= '')
+    username = conf.get('network', 'TrackerUsername', fallback='')
 
     if username == '':
         print('No Username specified for the tracker. Run \'python3 openbdr_config.py setusername\' to set one.')
@@ -81,13 +81,15 @@ def registerpeer(conf, pw):
     ct = commtracker.TrackerComm(domain)
 
     try:
-        ct.add_peer(username, pw, peername)
+        pid = ct.add_peer(username, password, peername)
     except commtracker.CommFailure as e:
         print(e.__str__)
         raise
 
+    conf['daemon']['PeerID'] = pid
 
-def addshare(conf, pw):
+
+def addshare(conf, password):
     domain = conf.get('network', 'TrackerDomain', fallback='')
 
     if domain == '':
@@ -108,8 +110,8 @@ def addshare(conf, pw):
     directorypath = input('Directory Path: ')
 
     try:
-        share_id = ct.add_share(username, pw, directoryid)
-        ct.add_peer_to_share(username, pw, peer_id, share_id)
+        share_id = ct.add_share(username, password, directoryid)
+        ct.add_peer_to_share(username, password, peer_id, share_id)
     except commtracker.CommFailure as e:
         print(e.__str__)
         raise
@@ -130,7 +132,7 @@ def setup(conf):
     print('Add shares with \'python3 openbdr_config.py addshare\'')
 
 
-config = configparser.ConfigParser()
+config = ConfigParser.ConfigParser()
 
 if not os.path.exists('~/.btfs'):
     os.makedirs('~/.btfs')
@@ -144,7 +146,7 @@ if os.path.exists('~/.btfs/openbdr.conf'):
 
 if len(sys.argv) != 2:
     print('usage: python3 openbdr_config.py (setup/setuser/setdomain/setrate/setpeer/setport/registeruser/registerpeer/'
-          'addshare/registerall)')
+          'addshare)')
     sys.exit(1)
 
 valid = False
@@ -162,7 +164,7 @@ if sys.argv[1] == 'setdomain':
     valid = True
 
 if sys.argv[1] == 'setrate':
-    setrate(conf)
+    setrate(config)
     valid = True
 
 if sys.argv[1] == 'setpeer':
@@ -188,9 +190,9 @@ if sys.argv[1] == 'addshare':
     valid = True
 
 if not valid:
-    print('usage: python3 openbdr_config.py (setup/setuser/setdomain/setrate/setpeer/setport/registeruser/registerpeer/'
-          'addshare/registerall)')
+    print 'usage: python3 openbdr_config.py (setup/setuser/setdomain/setrate/setpeer/setport/registeruser/registerpeer/' \
+          'addshare)'
     sys.exit(1)
 
-with open('~/.btfs/openbdr.conf', 'w') as file:
-    config.write(file)
+with open('~/.btfs/openbdr.conf', 'w') as f:
+    config.write(f)

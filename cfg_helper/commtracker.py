@@ -248,4 +248,3 @@ class TrackerComm(object):
 
         if res.status != 200:
             raise CommFailure('Validation Failure')
- 
