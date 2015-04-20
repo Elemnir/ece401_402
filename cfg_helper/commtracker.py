@@ -1,6 +1,6 @@
 from __future__ import print_function
 from httplib2 import Http
-from urllib import urlencode
+from urllib.parse import urlencode
 from bs4 import BeautifulSoup as BS
 
 
