@@ -9,21 +9,29 @@ import getpass
 
 def setdomain(conf):
     domain = input('Tracker Domain: ')
+    if 'network' not in conf:
+        conf['network'] = {}
     conf['network']['TrackerDomain'] = domain
 
 
 def setuser(conf):
     username = input('Tracker Username: ')
+    if 'network' not in conf:
+        conf['network'] = {}
     conf['network']['TrackerUsername'] = username
 
 
 def setrate(conf):
     rate = input('Scanning Rate: ')
+    if 'daemon' not in conf:
+        conf['daemon'] = {}
     conf['daemon']['ScanRate'] = rate
 
 
 def setport(conf):
     port = input('Tracker Port: ')
+    if 'network' not in conf:
+        conf['network'] = {}
     conf['network']['DaemonPort'] = port
 
 
@@ -58,6 +66,8 @@ def registeruser(conf):
 
 def setpeer(conf):
     peername = input('Enter the name of this peer: ')
+    if 'daemon' not in conf:
+        conf['daemon'] = {}
     conf['daemon']['PeerName'] = peername
 
 
@@ -86,6 +96,8 @@ def registerpeer(conf, password):
         print(e.__str__)
         raise
 
+    if 'daemon' not in conf:
+        conf['daemon'] = {}
     conf['daemon']['PeerID'] = pid
 
 
@@ -116,6 +128,8 @@ def addshare(conf, password):
         print(e.__str__)
         raise
 
+    if directoryid not in conf:
+        conf[directoryid] = {}
     conf[directoryid]['DirectoryPath'] = directorypath
     conf[directoryid]['ID'] = share_id
 
