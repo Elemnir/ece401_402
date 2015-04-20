@@ -204,8 +204,8 @@ if sys.argv[1] == 'addshare':
     valid = True
 
 if not valid:
-    print 'usage: python3 openbdr_config.py (setup/setuser/setdomain/setrate/setpeer/setport/registeruser/registerpeer/' \
-          'addshare)'
+    print('usage: python3 openbdr_config.py (setup/setuser/setdomain/setrate/setpeer/setport/registeruser/registerpeer/'
+          'addshare)')
     sys.exit(1)
 
 with open('~/.btfs/openbdr.conf', 'w') as f:
