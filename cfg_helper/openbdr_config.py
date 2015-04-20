@@ -41,7 +41,7 @@ def registeruser(conf):
         print('No username in config file. Run \'python3 openbdr_config.py setuser\' to set one.')
         sys.exit(1)
 
-    domain = conf.get('network', 'DomainName', fallback='')
+    domain = conf.get('network', 'TrackerDomain', fallback='')
     if domain == '':
         print('No domain name in config file. Run \'python3 openbdr_config.py\' setdomain to set one.')
         sys.exit(1)
