@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  21 APR 2015 14:43
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  22 APR 2015 15:24
 entering extended mode
 **finalreport.tex
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.tex"
@@ -30,49 +30,86 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\enumitem\enumitem.sty"
+Package: enumitem 2011/09/28 v3.5.2 Customized lists
+\enitkv@toks@=\toks14
+\labelindent=\skip43
+\enit@outerparindent=\dimen103
+\enit@toks=\toks15
+\enit@inbox=\box26
+\enitdp@description=\count87
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\setspace\setspace.sty"
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
+\c@enumv=\count88
+\c@enumvi=\count89
+\enitdp@enum=\count90
+
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 25.
+(Font)              <14.4> on input line 28.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 25.
+(Font)              <7> on input line 28.
  [1
 
 {C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.toc")
 \tf@toc=\write3
  [2]
-[3] ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux") ) 
+[3]
+Overfull \hbox (12.90779pt too wide) in paragraph at lines 45--47
+[]\OT1/cmr/m/n/12 Definitions (\OT1/cmr/m/it/12 Taken from http://jonas.nitro.d
+k/bittorrent/bittorrent-rfc.html\OT1/cmr/m/n/12 ) 
+ []
+
+[4] [5] [6]
+Overfull \hbox (10.9622pt too wide) in paragraph at lines 98--99
+[]\OT1/cmr/m/n/12 Users may com-mu-ni-cate with any track-ers they choose
+ []
+
+[7] [8]
+Overfull \hbox (12.65312pt too wide) in paragraph at lines 134--135
+[]\OT1/cmr/m/n/12 The util-ity will com-ply with Bit-tor-rent Pro-to-col Ver-si
+on 1.0 (BTP/1.0). 
+ []
+
+
+Overfull \hbox (0.2963pt too wide) in paragraph at lines 135--137
+[]\OT1/cmr/m/n/12 All soft-ware com-po-nents will sup-port de-ploy-ment on the 
+GNU/Linux
+ []
+
+[9] ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux") ) 
 Here is how much of TeX's memory you used:
- 258 strings out of 493921
- 3471 string characters out of 3144873
- 51031 words of memory out of 3000000
- 3624 multiletter control sequences out of 15000+200000
- 6232 words of font info for 23 fonts, out of 3000000 for 9000
+ 580 strings out of 493921
+ 8653 string characters out of 3144873
+ 57539 words of memory out of 3000000
+ 3941 multiletter control sequences out of 15000+200000
+ 6579 words of font info for 24 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 22i,6n,19p,143b,234s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 22i,6n,20p,1404b,643s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
 ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Progr
 am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (3 pages, 47796 bytes).
+Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Fi
+les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on finalreport.pdf (9 pages, 76182 bytes).
 PDF statistics:
- 28 PDF objects out of 1000 (max. 8388607)
+ 52 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

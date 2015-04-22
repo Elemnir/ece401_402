@@ -1,8 +1,8 @@
 \documentclass[12 pt]{article}
 
-\usepackage{setspace}
+\usepackage{enumitem, setspace}
 
-\title{Open Bittorrent Directory Replication}
+\title{Open Bittorrent Directory Replication Final Report}
 
 \author{Adam Howard \\
 	\texttt{ahowar31@vols.utk.edu}
@@ -21,6 +21,9 @@
 
 \date{April 24, 2015}
 
+\newlist{enum}{enumerate}{6}
+\setlist[enum]{label*=\textbf{\arabic*.},leftmargin=*}
+
 \begin{document}
 	\maketitle
 	\pagebreak
@@ -28,9 +31,113 @@
 	
 	\tableofcontents
 	
+	\pagebreak
+	
 	\section{Executive Summary}
 	
+	The purpose of the Open Bittorrent Directory Replication project is to develop a free alternative to the Bittorrent Sync utility. Bittorrent Sync offers users file replication across multiply computers in a way similar to the widely used Dropbox application, but is built on top of the Bittorrent Protocol, requires no centralized file server, and has no limits on the size of the data that can be stored in it. The goal is to produce the desired software suite and support systems. To do this, we decided to split the project into three main parts: the torrent utility, the tracker, and the configuration tool. The torrent utility can be viewed as the client program for out product. It will run as either a background process, or daemon, or a foreground process. The tracker is a server that will keep track of which of the daemons is online, and to communicate to that daemon the locations of its peers. The configuration tool is a script which the user can use to change settings for the utility, such as the login information of the tracker or the directories that need to be monitored. The configuration tool also has a graphical user interface, or GUI, that will give the user a more user-friendly way of changing the settings. As of the time of writing, the core functionality of all three parts are finished, and the software is to be released under the BSD 3-Clause License.
+	
+	\pagebreak
+	
 	\section{Requirements}
+	
+	\begin{enum}
+		\item Definitions (\textit{Taken from http://jonas.nitro.dk/bittorrent/bittorrent-rfc.html})
+		\begin{enum}
+			\item Peer - A peer is a node in a network participating in file sharing. It can simultaneously act both as a server and a client to other nodes on the network.
+			\item Neighboring peers - Peers to which a client has an active point to point TCP connection.
+			\item Client - A client is a user agent that acts as a peer on behalf of a user.
+			\item Torrent - A torrent is the term for the file (single-file torrent) or group of files (multi-file torrent) that the client is downloading.
+			\item Swarm - A network of peers that actively operate on a given torrent.
+			\item Seeder - A peer that has a complete copy of a torrent
+			\item Tracker - A tracker is a centralized server that holds information about one or more torrents and associated swarms. It functions as a gateway for peers into the swarm.
+			\item Metainfo file - A text file that holds information about the torrent, e.g. the URL of the tracker. It usually has the extension .torrent.
+		\end{enum}
+		\item Utility
+		\begin{enum}
+			\item Usage
+			\begin{enum}
+				\item The utility will run as a background process (daemon) on the local system.
+				\item The utility will monitor a number of specified directories on the local file system.
+				\item The utility will automatically create and modify a Metainfo file (.torrent) for each monitored directory.
+				\item The utility will periodically check monitored directories for file modifications by their timestamps.
+				\item The utility will inform peers when a modification occurs in one of its monitored directories by distributing an updated version of its Metainfo file.
+				\item The utility will listen for updates from peers, and will modify its monitored directories to reflect that update.
+			\end{enum}
+			\item Configuration
+			\begin{enum}
+				\item The utility will have a number of configuration parameters which can be adjusted based on the user's preference.
+				\item Configuration parameters will be specified within a text file stored on the local file system.
+				\item Networking settings will be defined within the configuration file.
+				\item Directories to be monitored by the utility will be defined within the configuration file.
+				\item Each directory defined in the configuration file may have a number of parameters defined (required parameters are indicated and optional parameters will be given some default value).
+				\begin{enum}
+					\item The directory's path on the file system.
+					\item An identifier for the directory.
+					\item How often the utility should check the directory for updates.
+					\item Upload/Download rate limits for transfers to and from the directory
+				\end{enum}
+			\end{enum}
+			\item File Manipulation
+			\begin{enum}
+				\item The utility will attempt to modify files in the monitored directories, as well as Metainfo files, automatically.
+				\item The utility will allow the user to add files within a monitored directory.
+				\item The utility will allow the user to remove files within a monitored directory.
+				\item The utility will allow the user to rename files within a monitored directory.
+				\item The utility will allow the user to modify files within a monitored directory.
+			\end{enum}
+			\item Network Communication
+			\begin{enum}
+				\item NAT and Gateway
+				\begin{enum}
+					\item The utility may automatically choose a port and use Universal Plug and Play (UPnP) to ensure that it is accessible behind a router.
+					\item The user may manually define the networking settings if he/she chooses to do so.
+				\end{enum}
+				\item Tracker
+				\begin{enum}
+					\item Users may communicate with any trackers they choose for coordinating their swarm of devices.
+					\item Security considerations are only guaranteed with any degree of certainty when communicating with tracker services we provide.
+					\begin{enum}
+						\item No passwords will be stored in plaintext by a service we control.
+						\item Communication with the tracker will be encrypted using TLS/SSL.
+					\end{enum}
+					\item Trackerless operation using Distributed Hash Tables will be supported.
+				\end{enum}
+				\item Peers
+				\begin{enum}
+					\item Users will be required to authenticate a new peer to any given client.
+					\item Peers will communicate to trade up-to-date versions of the monitored directories' Metainfo files.
+					\item File transfer between peers will utilize the Bittorrent Protocol.
+				\end{enum}
+			\end{enum}
+		\end{enum}
+		\item Supporting Software and Services
+		\begin{enum}
+			\item Configuration Tool
+			\begin{enum}
+				\item The Configuration Tool can be issued commands to start and stop the utility.
+				\item The Configuration Tool will provide a command line interface.
+				\item The Configuration Tool will modify the text file the utility users for configuration.
+				\item The Configuration Tool will allow the user to add to, remove from, or modify the list of monitored directories without modifying the contents of the monitored directories.
+			\end{enum}
+			\item Application-Specific Private Tracker Service
+			\begin{enum}
+				\item We will provide users a tracker for instances of the utility to connect to.
+				\item The service will provide a web interface for managing the tracker.
+				\item The service will require user registration and authentication.
+				\item The service will allow users to add or remove monitored directories.
+			\end{enum}
+		\end{enum}
+		\item Standards, Licensing, and Supported Platforms
+		\begin{enum}
+			\item The software will be published using the BSD 3-Clause License.
+			\item The utility will comply with Bittorrent Protocol Version 1.0 (BTP/1.0).
+			\item All software components will support deployment on the GNU/Linux operating system.
+			\begin{enum}
+				\item The Debian distribution and its derivatives will be specifically targeted for support.
+			\end{enum}
+		\end{enum}
+	\end{enum}
 	
 	\section{Change Log}
 	
