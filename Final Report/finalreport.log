@@ -1,21 +1,14 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  22 APR 2015 15:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  22 APR 2015 22:27
 entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
 **finalreport.tex
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.tex"
-LaTeX2e <2011/06/27>
-Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
-abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
-croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2013-05-26, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
- lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
-german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
-ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
-an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
-ishmax, welsh, loaded.
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
+(./finalreport.tex
+LaTeX2e <2014/05/01>
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size12.clo"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -30,7 +23,7 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\enumitem\enumitem.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enitkv@toks@=\toks14
 \labelindent=\skip43
@@ -39,77 +32,130 @@ Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enit@inbox=\box26
 \enitdp@description=\count87
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\setspace\setspace.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-\c@enumv=\count88
-\c@enumvi=\count89
-\enitdp@enum=\count90
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+\lst@mode=\count88
+\lst@gtempboxa=\box27
+\lst@token=\toks17
+\lst@length=\count89
+\lst@currlwidth=\dimen104
+\lst@column=\count90
+\lst@pos=\count91
+\lst@lostspace=\dimen105
+\lst@width=\dimen106
+\lst@newlines=\count92
+\lst@lineno=\count93
+\lst@maxwidth=\dimen107
 
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
-LaTeX Font Info:    ... okay on input line 27.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
+\c@lstnumber=\count94
+\lst@skipnumbers=\count95
+\lst@framebox=\box28
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2014/03/04 1.5c listings configuration
+))
+Package: listings 2014/03/04 1.5c (Carsten Heinz)
+\c@enumv=\count96
+\c@enumvi=\count97
+\enitdp@enum=\count98
+
+(./finalreport.aux)
+\openout1 = `finalreport.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+\c@lstlisting=\count99
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <14.4> on input line 28.
+(Font)              <14.4> on input line 29.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 28.
+(Font)              <7> on input line 29.
  [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.toc")
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./fina
+lreport.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 5.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 5.
+)
 \tf@toc=\write3
- [2]
-[3]
-Overfull \hbox (12.90779pt too wide) in paragraph at lines 45--47
+\openout3 = `finalreport.toc'.
+
+ [2] [3]
+Overfull \hbox (12.90779pt too wide) in paragraph at lines 48--50
 []\OT1/cmr/m/n/12 Definitions (\OT1/cmr/m/it/12 Taken from http://jonas.nitro.d
 k/bittorrent/bittorrent-rfc.html\OT1/cmr/m/n/12 ) 
  []
 
 [4] [5] [6]
-Overfull \hbox (10.9622pt too wide) in paragraph at lines 98--99
+Overfull \hbox (10.9622pt too wide) in paragraph at lines 101--102
 []\OT1/cmr/m/n/12 Users may com-mu-ni-cate with any track-ers they choose
  []
 
 [7] [8]
-Overfull \hbox (12.65312pt too wide) in paragraph at lines 134--135
+Overfull \hbox (12.65312pt too wide) in paragraph at lines 137--138
 []\OT1/cmr/m/n/12 The util-ity will com-ply with Bit-tor-rent Pro-to-col Ver-si
 on 1.0 (BTP/1.0). 
  []
 
 
-Overfull \hbox (0.2963pt too wide) in paragraph at lines 135--137
+Overfull \hbox (0.2963pt too wide) in paragraph at lines 138--140
 []\OT1/cmr/m/n/12 All soft-ware com-po-nents will sup-port de-ploy-ment on the 
 GNU/Linux
  []
 
-[9] ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux") ) 
+(./oldconfig.conf
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 2.
+ (/usr/local/texlive/2014/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 2.
+[9]
+Overfull \hbox (25.94928pt too wide) in paragraph at lines 16--17
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[10]) (./newconfig.conf [11]) [12] [13] (./finalreport.aux) ) 
 Here is how much of TeX's memory you used:
- 580 strings out of 493921
- 8653 string characters out of 3144873
- 57539 words of memory out of 3000000
- 3941 multiletter control sequences out of 15000+200000
- 6579 words of font info for 24 fonts, out of 3000000 for 9000
- 841 hyphenation exceptions out of 8191
- 22i,6n,20p,1404b,643s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/
-Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
-ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Progr
-am Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program 
-Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Fi
-les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (9 pages, 76182 bytes).
+ 1831 strings out of 493117
+ 26794 string characters out of 6135433
+ 91733 words of memory out of 5000000
+ 5330 multiletter control sequences out of 15000+600000
+ 9493 words of font info for 34 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 28i,6n,32p,1508b,1373s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texliv
+e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive
+/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2
+014/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/201
+4/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2014/
+texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on finalreport.pdf (13 pages, 88001 bytes).
 PDF statistics:
- 52 PDF objects out of 1000 (max. 8388607)
+ 71 PDF objects out of 1000 (max. 8388607)
+ 49 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

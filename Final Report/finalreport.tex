@@ -1,8 +1,9 @@
 \documentclass[12 pt]{article}
 
-\usepackage{enumitem, setspace}
+\usepackage{enumitem, setspace, listings}
 
-\title{Open Bittorrent Directory Replication Final Report}
+\title{Team 22 \\
+	Open Bittorrent Directory Replication Final Report}
 
 \author{Adam Howard \\
 	\texttt{ahowar31@vols.utk.edu}
@@ -26,6 +27,8 @@
 
 \begin{document}
 	\maketitle
+	\vspace{180 pt}
+	Customer: Dr. James S. Plank
 	\pagebreak
 	\doublespacing
 	
@@ -35,7 +38,7 @@
 	
 	\section{Executive Summary}
 	
-	The purpose of the Open Bittorrent Directory Replication project is to develop a free alternative to the Bittorrent Sync utility. Bittorrent Sync offers users file replication across multiply computers in a way similar to the widely used Dropbox application, but is built on top of the Bittorrent Protocol, requires no centralized file server, and has no limits on the size of the data that can be stored in it. The goal is to produce the desired software suite and support systems. To do this, we decided to split the project into three main parts: the torrent utility, the tracker, and the configuration tool. The torrent utility can be viewed as the client program for out product. It will run as either a background process, or daemon, or a foreground process. The tracker is a server that will keep track of which of the daemons is online, and to communicate to that daemon the locations of its peers. The configuration tool is a script which the user can use to change settings for the utility, such as the login information of the tracker or the directories that need to be monitored. The configuration tool also has a graphical user interface, or GUI, that will give the user a more user-friendly way of changing the settings. As of the time of writing, the core functionality of all three parts are finished, and the software is to be released under the BSD 3-Clause License.
+	The purpose of the Open Bittorrent Directory Replication project is to develop a free alternative to the Bittorrent Sync utility. Bittorrent Sync offers users file replication across multiple computers in a way similar to the widely used Dropbox application, but is built on top of the Bittorrent Protocol, requires no centralized file server, and has no limits on the size of the data that can be stored in it. Our team's goal for the course was to produce the desired software suite and support systems. To help make this goal feasible, we decided to split the project into three main parts: the torrent utility, the tracker, and the configuration tool. The torrent utility can be viewed as the client program for out product. Users may run it as either a foreground or a background process. The tracker is a web server that will keep track of which of the daemons is online, and to communicate to that daemon the locations of its peers. The configuration tool is a script which the user can use to change settings for the utility, such as the login information of the tracker or the directories that need to be monitored. The configuration tool also has a graphical user interface, or GUI, that presents a user-friendly alternative to the command line for changing the Open Bittorrent Directory Replication software settings. As of the time tis report was written, the core functionality of all three parts is finished, and the software is to be released under the BSD 3-Clause License.
 	
 	\pagebreak
 	
@@ -142,6 +145,24 @@
 	\section{Change Log}
 	
 	\section{Design Process}
+	
+	\subsection{Configuration Tool}
+	
+	The Configuration Tool is such that we needed to come up with a configuration file structure that was not only easily human-readable, but also easy to parse from a programming standpoint. Originally, while brainstorming a way to do this, we decided to use an nginx-style structure, as follows.
+	
+	\lstinputlisting{oldconfig.conf}
+	
+	This proved to be difficult to read and edit, and also appeared to be difficult to parse. After researching different ways to go about this, we came across the ConfigParser python library, which creates, modifies, and writes to configuration files of a different format, shown below.
+	
+	\lstinputlisting{newconfig.conf}
+	
+	The IDs are blank because they are filled in with the return value from the tracker, and this is a fresh configuration. 
+	
+	We used Python 3 to implement this tool, since we felt that file I/O and parsing are a strength of a scripting language such as Python. Also, the team members working on this part had previous experience using it.
+	
+	Originally, the configuration tool consisted of two parts: a first time setup script and a bootstrap script. The setup script was only for first time setup, and it had the user input setting such as the tracker domain, the tracker username, and the directories to be monitored. The bootstrap script was to register the user, the peer, and all of the shares (or directories) with the tracker. This approach was abandoned later in the project for a more customizable approach. With the current style of the script, it can be invoked with \texttt{python openbdr\_config.py [command]}, where ``command'' some function, such as \texttt{addshare, setuser, registeruser}, etc.
+	
+	The other part of the configuration tool is the graphical user interface, or GUI. For this, we chose to use the Qt framework to implement this part. We chose Qt for a number of reasons, but the main ones being ease of use and familiarity. Qt is easy to use thanks to its language, which is C++ combined with QML, Qt's proprietary language. Since the team has experience in C++, QML was not a problem to learn. The Qt application shows the options that can be edited with the configuration tool, and will edit them appropriately.
 	
 	\section{Lessons Learned}
 	
