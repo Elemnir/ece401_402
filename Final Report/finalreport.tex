@@ -146,6 +146,14 @@
 	
 	\section{Design Process}
 	
+	\subsection{Tracker}
+	
+	To manage the daemons, a server was needed that would keep track of which of the daemons is online, and to communicate to that daemon the locations of its peers. This server is referred to as a tracker, and is a webserver that responds to requests from the daemons with an up-to-date list of all the peers it is currently communicating with. In addition to communicating with the daemons, the tracker will also needed to allow the user to manage their account and the directories which are monitored and shared between the daemons.
+	
+	The tracker was developed using Django, a high-level Python web framework. We chose Django because it provides many features that helped to alleviate the tracker design, such as user accounts and automatic form validation. The primary reasons that we chose Django over any alternatives is that it was free and simple to use, and it is published open-source under a BSD license, so it was appropriate for the intended distribution of this project. The tracker application exposes two main ``views,'' that observed by the utility, and that which the user, or the configuration tool acting as the user, contacts to allow and disallow certain peers and to manage which directories are to be monitored. 
+	
+	Daemons communicate with the tracker over Bencoded HTTP requests and responses. A Bencoded request contains a dictionary of key/value pairs describing the daemon and the directory it is requesting information about. The response contains a list of active peers that the tracker is aware of, and that the daemon contacts to attempt to obtain parts of the requested files. It is important to note, that while the tracker maintains the peer information, it does not have the content of any of the files within the directory and does not necessarily know anything about the torrents it manages.
+	
 	\subsection{Configuration Tool}
 	
 	The Configuration Tool is such that we needed to come up with a configuration file structure that was not only easily human-readable, but also easy to parse from a programming standpoint. Originally, while brainstorming a way to do this, we decided to use an nginx-style structure, as follows.
