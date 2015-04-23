@@ -2,8 +2,9 @@
 \contentsline {section}{\numberline {2}Requirements}{4}
 \contentsline {section}{\numberline {3}Change Log}{9}
 \contentsline {section}{\numberline {4}Design Process}{9}
-\contentsline {subsection}{\numberline {4.1}Tracker}{9}
-\contentsline {subsection}{\numberline {4.2}Configuration Tool}{12}
-\contentsline {section}{\numberline {5}Lessons Learned}{16}
-\contentsline {section}{\numberline {6}Contributions}{16}
-\contentsline {section}{\numberline {7}Signatures}{16}
+\contentsline {subsection}{\numberline {4.1}Utility}{9}
+\contentsline {subsection}{\numberline {4.2}Tracker}{13}
+\contentsline {subsection}{\numberline {4.3}Configuration Tool}{15}
+\contentsline {section}{\numberline {5}Lessons Learned}{19}
+\contentsline {section}{\numberline {6}Contributions}{19}
+\contentsline {section}{\numberline {7}Signatures}{19}
