@@ -144,6 +144,12 @@
 	
 	\section{Change Log}
 	
+	The first change that was made to the original project was the name. The first name we had was Bittorrent File Sync, or BTFS. This was changed to Open Bittorrent Directory Replication, or Open BDR. Originally, we had planned to license under GPL, but to keep things simple, we decided on a BSD 3-Clause License instead. 
+	
+	In the configuration file section of the requirements (or \textbf{2.2.5}), some simple things were changed. The scanning rate for directories was moved be a single, general rate, instead of having one for each directory. Also, upload/download rate limits were not implemented due to time constraints.
+	
+	At point \textbf{2.4.2.3}, trackerless operation is also not supported due to time constraints.
+	
 	\section{Design Process}
 	
 	\subsection{Utility}
@@ -174,7 +180,7 @@
 	
 	\lstinputlisting{oldconfig.conf}
 	
-	This proved to be difficult to read and edit, and also appeared to be difficult to parse. After researching different ways to go about this, we came across the ConfigParser Python library, which creates, modifies, and writes to configuration files of a different format, shown below.
+	This proved to be difficult to read and edit, and also appeared to be difficult to parse. After researching different ways to go about this, we came across the ConfigParser Python library, which creates, modifies, and writes to configuration files of a different format, shown below. Also, this file type still has the old BTFS name instead of the newer Open BDR, which is used in the newer configuration file.
 	
 	\lstinputlisting{newconfig.conf}
 	
@@ -187,6 +193,12 @@
 	The other part of the configuration tool is the graphical user interface, or GUI. For this, we chose to use the Qt framework to implement this part. We chose Qt for a number of reasons, but the main ones being ease of use and familiarity. Qt is easy to use thanks to its language, which is C++ combined with QML, Qt's proprietary language. Since the team has experience in C++, QML was not a problem to learn. The Qt application shows the options that can be edited with the configuration tool and will edit them appropriately.
 	
 	\section{Lessons Learned}
+	
+	In actuality, there was only one major unexpected event in working on this project. This was a problem with the \texttt{libtorrent} library that we are using. \texttt{Libtorrent} was a very integral part of the utility part of the project, as it is the part that does the actual downloading and uploading of the files. When we thought that we had finished the core functionality, \texttt{libtorrent} seemed to not be doing anything at all. Thanks to some diligent work, we eventually figured out the problem and were able to download and upload. A minor problem we had was that the previous configuration tool wasn't fully user friendly or able to dynamically change the configuration file. This was adapted to by rewriting the configuration tool in a more CLI-friendly way.
+	
+	There were many useful things that we learned in doing this project. For one, learning how to use different APIs, such as Django, \texttt{libtorrent}, and Qt, taught us not only how to use these specific APIs but also prepared us for using other APIs in our future careers. We also learned how to divide a large project up into manageable parts and how to work as a team to finish these parts in a timely manner.
+	
+	As one can see from the change log above, almost all of the functionality that we planned at the beginning of the project was finished, with only a few minor uses being unfinished due to time. For this reason, we feel that the project was a success.
 	
 	\section{Contributions}
 	
