@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  23 APR 2015 22:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  23 APR 2015 22:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -235,58 +235,58 @@ File: GUI.png Graphic file (type png)
 <use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 196.
 (pdftex.def)             Requested size: 155.99762pt x 314.703pt.
- [19] [20 <./GUI.png>] [21] [22]
-<Adamsig.png, id=81, 462.22687pt x 104.64093pt>
+ [19] [20 <./GUI.png>] [21] [22] [23] [24]
+<Adamsig.png, id=88, 462.22687pt x 104.64093pt>
 File: Adamsig.png Graphic file (type png)
  <use Adamsig.png>
-Package pdftex.def Info: Adamsig.png used on input line 220.
+Package pdftex.def Info: Adamsig.png used on input line 225.
 (pdftex.def)             Requested size: 117.00119pt x 26.48747pt.
- [23]
-Underfull \hbox (badness 10000) in paragraph at lines 222--223
+
+Underfull \hbox (badness 10000) in paragraph at lines 227--228
 
  []
 
-<Mauricesig.png, id=86, 79.497pt x 36.6168pt>
+<Mauricesig.png, id=89, 79.497pt x 36.6168pt>
 File: Mauricesig.png Graphic file (type png)
  <use Mauricesig.png>
-Package pdftex.def Info: Mauricesig.png used on input line 224.
+Package pdftex.def Info: Mauricesig.png used on input line 229.
 (pdftex.def)             Requested size: 117.00119pt x 53.8942pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 224--225
+Underfull \hbox (badness 10000) in paragraph at lines 229--230
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 226--227
+Underfull \hbox (badness 10000) in paragraph at lines 231--232
 
  []
 
-<Johnsig.png, id=87, 240.9pt x 88.33pt>
+<Johnsig.png, id=90, 240.9pt x 88.33pt>
 File: Johnsig.png Graphic file (type png)
  <use Johnsig.png>
-Package pdftex.def Info: Johnsig.png used on input line 228.
+Package pdftex.def Info: Johnsig.png used on input line 233.
 (pdftex.def)             Requested size: 117.00119pt x 42.89929pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 230--231
+Underfull \hbox (badness 10000) in paragraph at lines 235--236
 
  []
 
-<Jeremysig.png, id=88, 925.056pt x 520.344pt>
+<Jeremysig.png, id=91, 925.056pt x 520.344pt>
 File: Jeremysig.png Graphic file (type png)
  <use Jeremysig.png>
-Package pdftex.def Info: Jeremysig.png used on input line 232.
+Package pdftex.def Info: Jeremysig.png used on input line 237.
 (pdftex.def)             Requested size: 117.00119pt x 65.81299pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 234--235
+Underfull \hbox (badness 10000) in paragraph at lines 239--240
 
  []
 
-<Matthewsig.png, id=89, 925.056pt x 520.344pt>
+<Matthewsig.png, id=92, 925.056pt x 520.344pt>
 File: Matthewsig.png Graphic file (type png)
  <use Matthewsig.png>
-Package pdftex.def Info: Matthewsig.png used on input line 236.
+Package pdftex.def Info: Matthewsig.png used on input line 241.
 (pdftex.def)             Requested size: 117.00119pt x 65.81299pt.
- [24 <./Adamsig.png> <./Mauricesig.png> <./Johnsig.png> <./Jeremysig.png> <./Ma
+ [25 <./Adamsig.png> <./Mauricesig.png> <./Johnsig.png> <./Jeremysig.png> <./Ma
 tthewsig.png>] (./finalreport.aux) ) 
 Here is how much of TeX's memory you used:
  3088 strings out of 493117
@@ -304,10 +304,10 @@ public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
 lic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
 ic/amsfonts/cm/cmti12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publi
 c/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (24 pages, 291090 bytes).
+Output written on finalreport.pdf (25 pages, 292336 bytes).
 PDF statistics:
- 120 PDF objects out of 1000 (max. 8388607)
- 76 compressed objects within 1 object stream
+ 124 PDF objects out of 1000 (max. 8388607)
+ 79 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
