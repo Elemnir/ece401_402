@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  23 APR 2015 03:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  23 APR 2015 21:13
 entering extended mode
 **finalreport.tex
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.tex"
@@ -143,7 +143,7 @@ Overfull \hbox (25.94928pt too wide) in paragraph at lines 16--17
  []
 
 [16]) ("C:\Users\Jeremy\Documents\ece401_402\Final Report\newconfig.conf"
-[17]) [18] [19] [20]
+[17]) [18] [19] [20] [21] [22] [23]
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux") ) 
 Here is how much of TeX's memory you used:
  1833 strings out of 493921
@@ -157,12 +157,13 @@ Here is how much of TeX's memory you used:
 ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Progra
 m Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program F
 iles (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program File
-s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files 
-(x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x
-86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (20 pages, 109806 bytes).
+s (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files (x
+86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86
+)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (x86)/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on finalreport.pdf (23 pages, 122120 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
+ 104 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
