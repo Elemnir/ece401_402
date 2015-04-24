@@ -1,21 +1,14 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  23 APR 2015 21:16
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  23 APR 2015 22:26
 entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
 **finalreport.tex
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.tex"
-LaTeX2e <2011/06/27>
-Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
-abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
-croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2013-05-26, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
- lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
-german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
-ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
-an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
-ishmax, welsh, loaded.
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\article.cls"
+(./finalreport.tex
+LaTeX2e <2014/05/01>
+Babel <3.9k> and hyphenation patterns for 78 languages loaded.
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\size12.clo"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/size12.clo
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -30,7 +23,7 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\enumitem\enumitem.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enitkv@toks@=\toks14
 \labelindent=\skip43
@@ -39,12 +32,12 @@ Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \enit@inbox=\box26
 \enitdp@description=\count87
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\setspace\setspace.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.sty"
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.sty
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/05/08 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
 )
 \lst@mode=\count88
@@ -60,38 +53,38 @@ Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \lst@lineno=\count93
 \lst@maxwidth=\dimen107
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\lstmisc.sty"
-File: lstmisc.sty 2014/09/06 1.5e (Carsten Heinz)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2014/03/04 1.5c (Carsten Heinz)
 \c@lstnumber=\count94
 \lst@skipnumbers=\count95
 \lst@framebox=\box28
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\listings\listings.cfg"
-File: listings.cfg 2014/09/06 1.5e listings configuration
+(/usr/local/texlive/2014/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2014/03/04 1.5c listings configuration
 ))
-Package: listings 2014/09/06 1.5e (Carsten Heinz)
+Package: listings 2014/03/04 1.5c (Carsten Heinz)
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
-Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2014/04/25 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\graphics.cfg"
-File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\pdftex-def\pdftex.def"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count96
@@ -103,7 +96,9 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \c@enumvi=\count98
 \enitdp@enum=\count99
 
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux")
+(./finalreport.aux)
+\openout1 = `finalreport.aux'.
+
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
 LaTeX Font Info:    ... okay on input line 28.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
@@ -118,7 +113,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
 LaTeX Font Info:    ... okay on input line 28.
 \c@lstlisting=\count100
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\context\base\supp-pdf.mkii"
+(/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count101
 \scratchdimen=\dimen110
@@ -131,15 +126,63 @@ LaTeX Font Info:    ... okay on input line 28.
 \MPnumerator=\count105
 \makeMPintoPDFobject=\count106
 \everyMPtoPDFconversion=\toks19
+) (/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in PDF mode is detected.
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/grfext.sty
+Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
+))
+(/usr/local/texlive/2014/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
+
+(/usr/local/texlive/2014/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)))
+Package grfext Info: Graphics extension search list:
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 452.
+
+(/usr/local/texlive/2014/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 29.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 29.
- [1
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.toc"
+[1
+
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+(./finalreport.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -148,8 +191,9 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 5.
 )
 \tf@toc=\write3
- [2]
-[3]
+\openout3 = `finalreport.toc'.
+
+ [2] [3]
 Overfull \hbox (12.90779pt too wide) in paragraph at lines 48--50
 []\OT1/cmr/m/n/12 Definitions (\OT1/cmr/m/it/12 Taken from http://jonas.nitro.d
 k/bittorrent/bittorrent-rfc.html\OT1/cmr/m/n/12 ) 
@@ -172,11 +216,10 @@ Overfull \hbox (0.2963pt too wide) in paragraph at lines 138--140
 GNU/Linux
  []
 
-[9] [10] [11] [12] [13] [14]
-("C:\Users\Jeremy\Documents\ece401_402\Final Report\oldconfig.conf"
+[9] [10] [11] [12] [13] [14] (./oldconfig.conf
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 2.
 
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+(/usr/local/texlive/2014/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
@@ -186,34 +229,85 @@ Overfull \hbox (25.94928pt too wide) in paragraph at lines 16--17
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
-[16]) ("C:\Users\Jeremy\Documents\ece401_402\Final Report\newconfig.conf"
-[17]) [18] <GUI.png, id=64, 130.23656pt x 262.73157pt>
+[16]) (./newconfig.conf [17]) [18] <GUI.png, id=65, 130.23656pt x 262.73157pt>
 File: GUI.png Graphic file (type png)
- <use GUI.png>
+
+<use GUI.png>
 Package pdftex.def Info: GUI.png used on input line 196.
 (pdftex.def)             Requested size: 155.99762pt x 314.703pt.
- [19]
-[20 <C:/Users/Jeremy/Documents/ece401_402/Final Report/GUI.png>] [21] [22]
-[23] ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.aux") ) 
+ [19] [20 <./GUI.png>] [21] [22]
+<Adamsig.png, id=81, 462.22687pt x 104.64093pt>
+File: Adamsig.png Graphic file (type png)
+ <use Adamsig.png>
+Package pdftex.def Info: Adamsig.png used on input line 220.
+(pdftex.def)             Requested size: 117.00119pt x 26.48747pt.
+ [23]
+Underfull \hbox (badness 10000) in paragraph at lines 222--223
+
+ []
+
+<Mauricesig.png, id=86, 79.497pt x 36.6168pt>
+File: Mauricesig.png Graphic file (type png)
+ <use Mauricesig.png>
+Package pdftex.def Info: Mauricesig.png used on input line 224.
+(pdftex.def)             Requested size: 117.00119pt x 53.8942pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--225
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 226--227
+
+ []
+
+<Johnsig.png, id=87, 240.9pt x 88.33pt>
+File: Johnsig.png Graphic file (type png)
+ <use Johnsig.png>
+Package pdftex.def Info: Johnsig.png used on input line 228.
+(pdftex.def)             Requested size: 117.00119pt x 42.89929pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 230--231
+
+ []
+
+<Jeremysig.png, id=88, 925.056pt x 520.344pt>
+File: Jeremysig.png Graphic file (type png)
+ <use Jeremysig.png>
+Package pdftex.def Info: Jeremysig.png used on input line 232.
+(pdftex.def)             Requested size: 117.00119pt x 65.81299pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 234--235
+
+ []
+
+<Matthewsig.png, id=89, 925.056pt x 520.344pt>
+File: Matthewsig.png Graphic file (type png)
+ <use Matthewsig.png>
+Package pdftex.def Info: Matthewsig.png used on input line 236.
+(pdftex.def)             Requested size: 117.00119pt x 65.81299pt.
+ [24 <./Adamsig.png> <./Mauricesig.png> <./Johnsig.png> <./Jeremysig.png> <./Ma
+tthewsig.png>] (./finalreport.aux) ) 
 Here is how much of TeX's memory you used:
- 2706 strings out of 493921
- 39254 string characters out of 3144873
- 102851 words of memory out of 3000000
- 6006 multiletter control sequences out of 15000+200000
- 9493 words of font info for 34 fonts, out of 3000000 for 9000
- 841 hyphenation exceptions out of 8191
- 28i,6n,32p,2355b,1373s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:
-/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/P
-rogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Prog
-ram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program
- Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Fil
-es (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files
- (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files (
-x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (23 pages, 131673 bytes).
+ 3088 strings out of 493117
+ 45737 string characters out of 6135433
+ 116835 words of memory out of 5000000
+ 6521 multiletter control sequences out of 15000+600000
+ 9493 words of font info for 34 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 37i,6n,32p,2355b,1373s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2014/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmti12.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmtt12.pfb>
+Output written on finalreport.pdf (24 pages, 291090 bytes).
 PDF statistics:
- 107 PDF objects out of 1000 (max. 8388607)
+ 120 PDF objects out of 1000 (max. 8388607)
+ 76 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
