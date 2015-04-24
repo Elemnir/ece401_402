@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  24 APR 2015 01:00
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.8.24)  24 APR 2015 01:03
 entering extended mode
 **finalreport.tex
 ("C:\Users\Jeremy\Documents\ece401_402\Final Report\finalreport.tex"
@@ -257,7 +257,7 @@ Here is how much of TeX's memory you used:
  6026 multiletter control sequences out of 15000+200000
  9493 words of font info for 34 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 28i,6n,32p,2355b,1373s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 28i,6n,32p,2356b,1373s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmb
 x12.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12
 .pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pf
@@ -265,7 +265,7 @@ b><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C
 :/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/
 Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Pr
 ogram Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on finalreport.pdf (25 pages, 304178 bytes).
+Output written on finalreport.pdf (25 pages, 304157 bytes).
 PDF statistics:
  122 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
