@@ -5,6 +5,6 @@
 \contentsline {subsection}{\numberline {4.1}Utility}{10}
 \contentsline {subsection}{\numberline {4.2}Tracker}{13}
 \contentsline {subsection}{\numberline {4.3}Configuration Tool}{15}
-\contentsline {section}{\numberline {5}Lessons Learned}{19}
-\contentsline {section}{\numberline {6}Contributions}{20}
+\contentsline {section}{\numberline {5}Lessons Learned}{20}
+\contentsline {section}{\numberline {6}Contributions}{21}
 \contentsline {section}{\numberline {7}Signatures}{23}

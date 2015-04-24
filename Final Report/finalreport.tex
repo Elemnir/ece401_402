@@ -1,6 +1,6 @@
 \documentclass[12 pt]{article}
 
-\usepackage{enumitem, setspace, listings}
+\usepackage{enumitem, setspace, listings, graphicx}
 
 \title{Team 22 \\
 	Open Bittorrent Directory Replication Final Report}
@@ -190,7 +190,12 @@
 	
 	Originally, the configuration tool consisted of two parts: a first time setup script and a bootstrap script. The setup script was only for first time setup, and it had the user input setting such as the tracker domain, the tracker username, and the directories to be monitored. The bootstrap script was to register the user, the peer, and all of the shares (or directories) with the tracker. This approach was abandoned later in the project for a more customizable approach. With the current style of the script, it can be invoked with \texttt{python openbdr\_config.py [command]}, where ``command'' is some function, such as \texttt{addshare, setuser, registeruser}, etc. This was to give the user more control over the configuration tool and to make writing the GUI easier.
 	
-	The other part of the configuration tool is the graphical user interface, or GUI. For this, we chose to use the Qt framework to implement this part. We chose Qt for a number of reasons, but the main ones being ease of use and familiarity. Qt is easy to use thanks to its language, which is C++ combined with QML, Qt's proprietary language. Since the team has experience in C++, QML was not a problem to learn. The Qt application shows the options that can be edited with the configuration tool and will edit them appropriately.
+	The other part of the configuration tool is the graphical user interface, or GUI. For this, we chose to use the Qt framework to implement this part. We chose Qt for a number of reasons, but the main ones being ease of use and familiarity. Qt is easy to use thanks to its language, which is C++ combined with QML, Qt's proprietary language. Since the team has experience in C++, QML was not a problem to learn. The Qt application shows the options that can be edited with the configuration tool and will edit them appropriately. Below is a mock-up of the GUI.
+	
+	\begin{center}
+\includegraphics[width=0.4\linewidth]{GUI}
+\end{center}
+
 	
 	\section{Lessons Learned}
 	
